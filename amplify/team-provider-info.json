@@ -23,11 +23,11 @@
         },
         "volunteers": {
           "deploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
-          "s3Key": "amplify-builds/volunteers-7478764c627669427a6d-build.zip"
+          "s3Key": "amplify-builds/volunteers-50514b50644b71364279-build.zip"
         },
         "emergencyresponseappd1b77548PostConfirmation": {
           "deploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
-          "s3Key": "amplify-builds/emergencyresponseappd1b77548PostConfirmation-652b7239444b50587848-build.zip"
+          "s3Key": "amplify-builds/emergencyresponseappd1b77548PostConfirmation-51774a61757a596c6e65-build.zip"
         }
       },
       "api": {

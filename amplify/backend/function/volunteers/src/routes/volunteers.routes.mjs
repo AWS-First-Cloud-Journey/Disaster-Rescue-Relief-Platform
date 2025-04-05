@@ -13,11 +13,16 @@ import {
   calculateAvailabilityMetrics
 } from '../utils/volunteerUtils.mjs';
 import { historyService } from '../services/history.service.mjs';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, UpdateCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
 
 // Initialize Cognito client with region
 const cognito = new CognitoIdentityProvider({
   region: process.env.REGION || 'us-east-1'
 });
+const ddbClient = new DynamoDBClient({ region: process.env.REGION || 'us-east-1' });
+const documentClient = DynamoDBDocumentClient.from(ddbClient);
+
 const router = express.Router();
 
 // Get all volunteers with optional pagination
@@ -160,210 +165,6 @@ router.get('/:username/history', async (req, res) => {
   }
 });
 
-// Get summary statistics for volunteer performance
-router.get('/:username/performance', async (req, res) => {
-  try {
-    const username = req.params.username;
-
-    // First check if volunteer exists
-    const userPoolId = process.env.USER_POOL_ID;
-    if (!userPoolId) {
-      return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
-    }
-
-    let volunteerData;
-    try {
-      const params = {
-        UserPoolId: userPoolId,
-        Username: username
-      };
-
-      const command = new AdminGetUserCommand(params);
-      const response = await cognito.send(command);
-      volunteerData = formatVolunteerData(response);
-    } catch (error) {
-      if (error.name === 'UserNotFoundException') {
-        return res.status(404).json({ error: 'Volunteer not found' });
-      }
-      throw error;
-    }
-
-    // Get volunteer history
-    const history = await historyService.getVolunteerHistory(username);
-
-    // Calculate performance metrics
-    const metrics = {
-      totalRequests: history.length,
-      completedRequests: 0,
-      averageCompletionTime: null, // in hours
-      requestsByType: {},
-      requestsByMonth: {},
-      requestsByLocation: {}
-    };
-
-    if (history.length > 0) {
-      // Group requests by status
-      const completed = [];
-
-      history.forEach(item => {
-        // Count by action type
-        if (item.action_type) {
-          metrics.requestsByType[item.action_type] = (metrics.requestsByType[item.action_type] || 0) + 1;
-        }
-
-        // Count by status (look for COMPLETE actions)
-        if (item.action_type === 'COMPLETE' || item.new_status === 'DONE') {
-          metrics.completedRequests += 1;
-
-          // For completed tasks, calculate duration if possible
-          if (item.claim_time && item.completion_time) {
-            const claimTime = new Date(item.claim_time);
-            const completionTime = new Date(item.completion_time);
-            const durationHours = (completionTime - claimTime) / (1000 * 60 * 60);
-            completed.push(durationHours);
-          }
-        }
-
-        // Group by month
-        const month = new Date(item.timestamp).toLocaleString('en-us', { month: 'short', year: 'numeric' });
-        metrics.requestsByMonth[month] = (metrics.requestsByMonth[month] || 0) + 1;
-
-        // Group by location if available
-        if (item.request_location) {
-          metrics.requestsByLocation[item.request_location] =
-            (metrics.requestsByLocation[item.request_location] || 0) + 1;
-        }
-      });
-
-      // Calculate average completion time
-      if (completed.length > 0) {
-        const sum = completed.reduce((a, b) => a + b, 0);
-        metrics.averageCompletionTime = (sum / completed.length).toFixed(2);
-      }
-    }
-
-    res.json({
-      volunteer: volunteerData,
-      performance: metrics
-    });
-  } catch (error) {
-    console.error(`Error getting performance metrics for volunteer ${req.params.username}:`, error);
-    res.status(500).json({ error: error.message || 'Failed to get performance metrics' });
-  }
-});
-
-// Get active requests for a specific volunteer
-router.get('/:username/active-requests', async (req, res) => {
-  try {
-    // First check if volunteer exists
-    const userPoolId = process.env.USER_POOL_ID;
-    if (!userPoolId) {
-      return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
-    }
-
-    try {
-      const params = {
-        UserPoolId: userPoolId,
-        Username: req.params.username
-      };
-
-      const command = new AdminGetUserCommand(params);
-      await cognito.send(command);
-    } catch (error) {
-      if (error.name === 'UserNotFoundException') {
-        return res.status(404).json({ error: 'Volunteer not found' });
-      }
-      throw error;
-    }
-
-    // Get volunteer's active requests using a custom query
-    // This would depend on your data structure, but assuming you have a way to
-    // query active requests assigned to a volunteer
-    const activeRequests = await historyService.getVolunteerActiveRequests(req.params.username);
-
-    res.json({
-      username: req.params.username,
-      activeRequests: activeRequests
-    });
-  } catch (error) {
-    console.error(`Error getting active requests for volunteer ${req.params.username}:`, error);
-    res.status(500).json({ error: error.message || 'Failed to get active requests' });
-  }
-});
-
-// Get volunteers by skill
-router.get('/skills/:skill', async (req, res) => {
-  try {
-    const userPoolId = process.env.USER_POOL_ID;
-    if (!userPoolId) {
-      return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
-    }
-
-    const skill = req.params.skill;
-    const limit = parseInt(req.query.limit) || 50;
-
-    // Note: This filter assumes skills are stored in a custom:skills attribute
-    const params = {
-      UserPoolId: userPoolId,
-      Filter: `custom:skills contains "${skill}"`,
-      Limit: limit
-    };
-
-    if (req.query.token) {
-      params.PaginationToken = req.query.token;
-    }
-
-    const command = new ListUsersCommand(params);
-    const response = await cognito.send(command);
-
-    const volunteers = response.Users.map(formatVolunteerData);
-
-    res.json({
-      volunteers,
-      nextToken: response.PaginationToken
-    });
-  } catch (error) {
-    console.error(`Error getting volunteers with skill ${req.params.skill}:`, error);
-    res.status(500).json({ error: error.message || 'Failed to get volunteers by skill' });
-  }
-});
-
-// Get volunteers by location
-router.get('/location/:location', async (req, res) => {
-  try {
-    const userPoolId = process.env.USER_POOL_ID;
-    if (!userPoolId) {
-      return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
-    }
-
-    const location = req.params.location;
-    const limit = parseInt(req.query.limit) || 50;
-
-    const params = {
-      UserPoolId: userPoolId,
-      Filter: `custom:location = "${location}"`,
-      Limit: limit
-    };
-
-    if (req.query.token) {
-      params.PaginationToken = req.query.token;
-    }
-
-    const command = new ListUsersCommand(params);
-    const response = await cognito.send(command);
-
-    const volunteers = response.Users.map(formatVolunteerData);
-
-    res.json({
-      volunteers,
-      nextToken: response.PaginationToken
-    });
-  } catch (error) {
-    console.error(`Error getting volunteers in location ${req.params.location}:`, error);
-    res.status(500).json({ error: error.message || 'Failed to get volunteers by location' });
-  }
-});
-
 // Get volunteers overview statistics
 router.get('/stats', async (req, res) => {
   try {
@@ -449,6 +250,130 @@ router.get('/:username', async (req, res) => {
     }
 
     res.status(500).json({ error: error.message || 'Failed to get volunteer' });
+  }
+});
+
+// Verify a volunteer (admin only) using PATCH
+router.patch('/:username/verify', async (req, res) => {
+  try {
+    // Verify admin status
+    const adminId = req.headers['x-admin-id'];
+    const isAdmin = req.headers['x-is-admin'] === 'true';
+
+    if (!isAdmin) {
+      return res.status(403).json({ error: 'Admin privileges required for this operation' });
+    }
+
+    if (!adminId) {
+      return res.status(400).json({ error: 'Admin ID is required' });
+    }
+
+    const userPoolId = process.env.USER_POOL_ID;
+    if (!userPoolId) {
+      return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
+    }
+
+    // Get volunteer from Cognito to verify username and email
+    const username = req.params.username;
+    let email;
+
+    try {
+      const params = {
+        UserPoolId: userPoolId,
+        Username: username
+      };
+
+      const command = new AdminGetUserCommand(params);
+      const response = await cognito.send(command);
+
+      // Get email from user attributes
+      const emailAttr = response.UserAttributes.find(attr => attr.Name === 'email');
+      if (!emailAttr) {
+        return res.status(400).json({ error: 'Volunteer email not found' });
+      }
+
+      email = emailAttr.Value;
+    } catch (error) {
+      if (error.name === 'UserNotFoundException') {
+        return res.status(404).json({ error: 'Volunteer not found' });
+      }
+      throw error;
+    }
+
+    // First, check current verification status
+    const getParams = {
+      TableName: 'volunteers',
+      Key: {
+        id: username,
+        email: email
+      }
+    };
+
+    const getCommand = new GetCommand(getParams);
+    const currentRecord = await documentClient.send(getCommand);
+
+    if (!currentRecord.Item) {
+      return res.status(404).json({ error: 'Volunteer record not found in database' });
+    }
+
+    if (currentRecord.Item.is_verified) {
+      return res.status(400).json({ error: 'Volunteer is already verified' });
+    }
+
+    // Update the verification status
+    const updateParams = {
+      TableName: 'volunteers',
+      Key: {
+        id: username,
+        email: email
+      },
+      UpdateExpression: 'SET is_verified = :verified, is_verified_by = :admin',
+      ExpressionAttributeValues: {
+        ':verified': true,
+        ':admin': adminId
+      },
+      ReturnValues: 'ALL_NEW'
+    };
+
+    const updateCommand = new UpdateCommand(updateParams);
+    const result = await documentClient.send(updateCommand);
+
+    // Log the verification
+    console.log(`Volunteer ${username} verified by admin ${adminId}`);
+
+    // Record this action in the volunteer's history
+    const timestamp = new Date().toISOString();
+    const historyKey = `verification_${timestamp}`;
+
+    const historyUpdateParams = {
+      TableName: 'volunteers',
+      Key: {
+        id: username,
+        email: email
+      },
+      UpdateExpression: 'SET history.#historyKey = :historyValue',
+      ExpressionAttributeNames: {
+        '#historyKey': historyKey
+      },
+      ExpressionAttributeValues: {
+        ':historyValue': JSON.stringify({
+          action: 'verification',
+          admin_id: adminId,
+          timestamp: timestamp
+        })
+      }
+    };
+
+    const historyCommand = new UpdateCommand(historyUpdateParams);
+    await documentClient.send(historyCommand);
+
+    res.json({
+      message: 'Volunteer successfully verified',
+      volunteer: result.Attributes
+    });
+  } catch (error) {
+    console.error(`Error verifying volunteer ${req.params.username}:`, error);
+    res.status(500).json({ error: error.message || 'Failed to verify volunteer' });
   }
 });
 

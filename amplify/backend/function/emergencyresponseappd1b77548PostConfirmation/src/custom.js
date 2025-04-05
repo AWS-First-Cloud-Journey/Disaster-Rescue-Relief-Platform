@@ -108,6 +108,8 @@ function formatCognitoData(cognitoEvent) {
     email: email || '',
     phone_number: formattedPhoneNumber,
     full_name: fullName || '',
+    is_verified: false,  // Default to false for new users
+    is_verified_by: '',  // Empty string for new users
     history: {}
   };
 
@@ -150,7 +152,7 @@ async function createVolunteer(data) {
     throw new Error('Volunteer data is required');
   }
 
-  const { id, email, phone_number, full_name } = data;
+  const { id, email, phone_number, full_name, is_verified, is_verified_by } = data;
 
   if (!id || !email) {
     throw new Error('ID and email are required');
@@ -161,6 +163,8 @@ async function createVolunteer(data) {
     email,
     phone_number: phone_number ? parseInt(phone_number.replace(/\D/g, '')) : null,
     full_name: full_name || '',
+    is_verified: typeof is_verified === 'boolean' ? is_verified : false,
+    is_verified_by: is_verified_by || '',
     history: {}
   };
 

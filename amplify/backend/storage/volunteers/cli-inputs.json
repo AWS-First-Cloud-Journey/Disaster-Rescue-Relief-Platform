@@ -21,6 +21,14 @@
       "fieldType": "string"
     },
     {
+      "fieldName": "is_verified",
+      "fieldType": "boolean"
+    },
+    {
+      "fieldName": "is_verified_by",
+      "fieldType": "string"
+    },
+    {
       "fieldName": "history",
       "fieldType": "String",
       "isMap": true,
