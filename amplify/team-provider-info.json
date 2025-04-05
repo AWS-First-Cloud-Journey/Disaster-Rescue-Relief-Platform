@@ -1,4 +1,40 @@
 {
+  "stg": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-emergencyresponseapp-stg-b41b5-authRole",
+      "UnauthRoleArn": "arn:aws:iam::340879421878:role/amplify-emergencyresponseapp-stg-b41b5-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::340879421878:role/amplify-emergencyresponseapp-stg-b41b5-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
+      "UnauthRoleName": "amplify-emergencyresponseapp-stg-b41b5-unauthRole",
+      "StackName": "amplify-emergencyresponseapp-stg-b41b5",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:340879421878:stack/amplify-emergencyresponseapp-stg-b41b5/90e751f0-11bf-11f0-b523-02b6a031f731",
+      "AmplifyAppId": "d3othvwecqdkxl"
+    },
+    "categories": {
+      "auth": {
+        "emergencyresponseappd1b77548": {}
+      },
+      "function": {
+        "emergencyInfor": {
+          "deploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
+          "s3Key": "amplify-builds/emergencyInfor-5648566f497832464549-build.zip"
+        },
+        "volunteers": {
+          "deploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
+          "s3Key": "amplify-builds/volunteers-7478764c627669427a6d-build.zip"
+        }
+      },
+      "api": {
+        "fcjemergency": {}
+      },
+      "storage": {
+        "EmergencyInfor": {},
+        "requestHistory": {},
+        "requestershub": {}
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-emergencyresponseapp-dev-4ccf8-authRole",
@@ -33,42 +69,6 @@
       },
       "api": {
         "fcjemergency": {}
-      }
-    }
-  },
-  "stg": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-emergencyresponseapp-stg-b41b5-authRole",
-      "UnauthRoleArn": "arn:aws:iam::340879421878:role/amplify-emergencyresponseapp-stg-b41b5-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::340879421878:role/amplify-emergencyresponseapp-stg-b41b5-authRole",
-      "Region": "ap-southeast-1",
-      "DeploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
-      "UnauthRoleName": "amplify-emergencyresponseapp-stg-b41b5-unauthRole",
-      "StackName": "amplify-emergencyresponseapp-stg-b41b5",
-      "StackId": "arn:aws:cloudformation:ap-southeast-1:340879421878:stack/amplify-emergencyresponseapp-stg-b41b5/90e751f0-11bf-11f0-b523-02b6a031f731",
-      "AmplifyAppId": "d3othvwecqdkxl"
-    },
-    "categories": {
-      "auth": {
-        "emergencyresponseappd1b77548": {}
-      },
-      "function": {
-        "emergencyInfor": {
-          "deploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
-          "s3Key": "amplify-builds/emergencyInfor-5648566f497832464549-build.zip"
-        },
-        "volunteers": {
-          "deploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
-          "s3Key": "amplify-builds/volunteers-7478764c627669427a6d-build.zip"
-        }
-      },
-      "api": {
-        "fcjemergency": {}
-      },
-      "storage": {
-        "EmergencyInfor": {},
-        "requestHistory": {},
-        "requestershub": {}
       }
     }
   }

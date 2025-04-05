@@ -50,8 +50,9 @@ function EmptyState({ title, subtitle, action }) {
   );
 }
 
-function prepareSelectOptions(field, defaultOption, optionSet) {
+function prepareSelectOptions(field, defaultOption) {
   // Building a non redundant list of the field passed as parameter.
+  const optionSet = ["PENDING", "IN_PROGRESS", "DONE"];
 
   optionSet.sort();
 
@@ -68,7 +69,7 @@ function prepareSelectOptions(field, defaultOption, optionSet) {
 function RequestList(props) {
   const navigate = useNavigate();
   const {t} = props;
-  const [defaultStatus] = useState({ value: "0", label: t("volunteer-page.card.status-filter.any") });
+  const [defaultStatus] = useState({ value: "0", label: "Any Status" });
   const [loading, setLoading] = useState(true);
   const [requests, setRequests] = useState([]);
   const [status, setStatus] = useState(defaultStatus);
@@ -82,14 +83,13 @@ function RequestList(props) {
       "status",
     ],
   });
-  const optionSet = [t("volunteer-page.card.status-filter.pending"), t("volunteer-page.card.status-filter.in-progress"), t("volunteer-page.card.status-filter.done")];
   const [modalVisible, setModalVisible] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "",
     content: "",
     onConfirm: () => { },
   });
-  const selectRequestOptions = prepareSelectOptions("status", defaultStatus, optionSet);
+  const selectRequestOptions = prepareSelectOptions("status", defaultStatus);
 
   function matchesStatus(item, selectedStatus) {
     return (

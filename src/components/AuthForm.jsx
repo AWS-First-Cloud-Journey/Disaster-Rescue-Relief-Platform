@@ -33,7 +33,8 @@ function AuthForm(props) {
   const { t } = props;
 
   I18n.putVocabularies(translations);
-  I18n.setLanguage(props.i18n.language);
+  //I18n.setLanguage(props.i18n.language);
+  I18n.setLanguage("mi");
 
   I18n.putVocabularies({
     mi: {
@@ -54,7 +55,12 @@ function AuthForm(props) {
       'Please confirm your Password': 'သင့်စကားဝှက်ကို အတည်ပြုပါ။',
       'Role': 'အခန်းကဏ္ဍ',
       'Volunteer': 'စေတနာ့ဝန်ထမ်း',
-      'Confirm Password': 'စကားဝှက်အတည်ပြုခြင်း',
+      'Confirm': 'အတည်ပြုပါ။',
+      "Resend Code": "ကုဒ်ကို ပြန်ပို့ပါ။",
+      "Enter your code": "သင်၏ကုဒ်ကို ထည့်ပါ။",
+      "We Emailed You": "ကျွန်ုပ်တို့သည် သင်ထံ အီးမေးလ်ပို့ခဲ့သည်။",
+      "Your code is on the way. To log in, enter the code we emailed to": "သင်၏ကုဒ်သည် လမ်းပေါ်တွင်ဖြစ်နေသည်။ ဝင်ရောက်ရန်၊ ကျွန်ုပ်တို့သည် သင်ထံ အီးမေးလ်ပို့ခဲ့သော ကုဒ်ကို ထည့်ပါ။",
+      "It may take a minute to arrive": "ရောက်ရှိရန် တစ်မိနစ်ခန့် ကြာနိုင်သည်။",
       'Use a at least 8 character password with a mix of uppercase, lowercase and numbers.': 'စကားဝှက်ကို အနည်းဆုံး စားပြီး ရှိသည့် အချက်အလက်များကို အသစ်ထည့်ပါ။',
     },
   });
@@ -98,6 +104,18 @@ function AuthForm(props) {
         placeholder: t("auth.confirm_pass.placeholder"),
         isRequired: true,
         order: 4,
+      },
+    },
+    forgotPassword: {
+      username: {
+        placeholder: t("auth.email.placeholder"),
+      },
+    },
+    confirmSignUp: {
+      confirmation_code: {
+        label: t("auth.confirm_code.label"),
+        placeholder: t("auth.confirm_code.placeholder"),
+        isRequired: false,
       },
     },
   };
