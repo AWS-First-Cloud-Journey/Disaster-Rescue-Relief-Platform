@@ -1,0 +1,38 @@
+// {
+//   "httpMethod": "GET",
+//   "path": "/requesters/count",
+//   "queryStringParameters": {},
+//   "headers": {
+//     "Accept": "application/json"
+//   },
+//   "body": null,
+//   "isBase64Encoded": false
+// }
+{
+  "httpMethod": "PUT",
+  "path": "/requesters",
+  "queryStringParameters": {},
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "*/*"
+  },
+  "body": "{\"name\":\"John Deee\",\"phoneNumber\":\"1345867829011\",\"address\":\"123 Main St, City\",\"mapLink\":\"https://maps.google.com/?q=123+Main+St\",\"personCount\":\"5\",\"supply\":\"10\",\"bag\":\"5\",\"water\":\"20\",\"food\":\"15\",\"shelter\":\"2\",\"bodyBag\":\"0\"}",
+  "isBase64Encoded": false
+}
+// {
+//   "resource": "/requesters/{id}",
+//   "path": "/requesters/req-1743745790808",
+//   "httpMethod": "PATCH",
+//   "headers": {
+//     "Content-Type": "application/json"
+//   },
+//   "pathParameters": {
+//     "id": "req-1743745790808"
+//   },
+//   "requestContext": {
+//     "resourcePath": "/requesters/{id}",
+//     "httpMethod": "PATCH"
+//   },
+//   "body": "{\"status\":\"IN_PROGRESS\",\"assignedUser\":\"898a45fc-30f1-70fc-8941-4b2adee60980\"}",
+//   "isBase64Encoded": false
+// }

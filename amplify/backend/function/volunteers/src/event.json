@@ -1,0 +1,12 @@
+{
+  "httpMethod": "GET",
+  "path": "/volunteers/stats",
+  "queryStringParameters": {
+    "limit": "20"
+  },
+  "headers": {
+    "Accept": "application/json"
+  },
+  "body": null,
+  "isBase64Encoded": false
+}

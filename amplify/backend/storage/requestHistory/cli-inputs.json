@@ -1,0 +1,37 @@
+{
+  "resourceName": "requestHistory",
+  "tableName": "requestHistory",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "timestamp",
+    "fieldType": "string"
+  },
+  "gsi": [
+    {
+      "name": "requestIdIndex",
+      "partitionKey": {
+        "fieldName": "request_id",
+        "fieldType": "string"
+      },
+      "sortKey": {
+        "fieldName": "timestamp",
+        "fieldType": "string"
+      }
+    },
+    {
+      "name": "volunteerIdIndex",
+      "partitionKey": {
+        "fieldName": "volunteer_id",
+        "fieldType": "string"
+      },
+      "sortKey": {
+        "fieldName": "timestamp",
+        "fieldType": "string"
+      }
+    }
+  ],
+  "triggerFunctions": []
+}

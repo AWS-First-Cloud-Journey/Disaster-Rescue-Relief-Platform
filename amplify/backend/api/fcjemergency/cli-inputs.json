@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "paths": {
+    "/volunteers": {
+      "name": "/volunteers",
+      "lambdaFunction": "volunteers",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/requesters": {
+      "name": "/requesters",
+      "lambdaFunction": "emergencyInfor",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

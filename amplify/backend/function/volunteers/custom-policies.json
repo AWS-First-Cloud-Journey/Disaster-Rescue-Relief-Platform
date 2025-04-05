@@ -1,0 +1,28 @@
+[
+  {
+    "Action": [
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem",
+      "dynamodb:Query",
+      "dynamodb:Scan",
+      "dynamodb:PutItem",
+      "dynamodb:UpdateItem",
+      "dynamodb:DeleteItem"
+    ],
+    "Resource": [
+      "*"
+    ]
+  },
+  {
+    "Effect": "Allow",
+    "Action": [
+      "cognito-idp:ListUsers",
+      "cognito-idp:AdminGetUser"
+    ],
+    "Resource": [
+      {
+        "Fn::Sub": "arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/*"
+      }
+    ]
+  }
+]

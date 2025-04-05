@@ -1,0 +1,98 @@
+{
+  "resourceName": "EmergencyInfor",
+  "tableName": "EmergencyInfor",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": [],
+  "additionalFields": [
+    {
+      "fieldName": "req_full_name",
+      "fieldType": "string",
+      "required": true
+    },
+    {
+      "fieldName": "req_phone_number",
+      "fieldType": "number",
+      "required": true
+    },
+    {
+      "fieldName": "req_address",
+      "fieldType": "string",
+      "required": true
+    },
+    {
+      "fieldName": "req_affected_individuals",
+      "fieldType": "number",
+      "required": true
+    },
+    {
+      "fieldName": "req_location_link",
+      "fieldType": "string"
+    },
+    {
+      "fieldName": "req_type",
+      "fieldType": "string",
+      "values": [
+        "MEDICAL_SUPPLIES",
+        "SLEEPING_BAGS",
+        "WATER",
+        "FOOD",
+        "SHELTER",
+        "BODY_BAGS"
+      ]
+    },
+    {
+      "fieldName": "req_all_types",
+      "fieldType": "list",
+      "elementType": "string"
+    },
+    {
+      "fieldName": "medical_supplies_quantity",
+      "fieldType": "number"
+    },
+    {
+      "fieldName": "sleeping_bags_quantity",
+      "fieldType": "number"
+    },
+    {
+      "fieldName": "water_liters",
+      "fieldType": "number"
+    },
+    {
+      "fieldName": "food_meals_quantity",
+      "fieldType": "number"
+    },
+    {
+      "fieldName": "shelter_people_quantity",
+      "fieldType": "number"
+    },
+    {
+      "fieldName": "body_bags_quantity",
+      "fieldType": "number"
+    },
+    {
+      "fieldName": "image_key",
+      "fieldType": "string"
+    },
+    {
+      "fieldName": "created_at",
+      "fieldType": "string"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "string",
+      "values": [
+        "PENDING",
+        "IN_PROGRESS",
+        "DONE"
+      ]
+    },
+    {
+      "fieldName": "assigned_user",
+      "fieldType": "string"
+    }
+  ]
+}
