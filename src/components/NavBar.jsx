@@ -1,27 +1,34 @@
 import { useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { TopNavigation, Input, ButtonDropdown, Link, Button } from "@cloudscape-design/components";
+import {
+  TopNavigation,
+  Input,
+  ButtonDropdown,
+  Link,
+  Button,
+} from "@cloudscape-design/components";
 import { withTranslation } from "react-i18next";
 import { navigate, useNavigate } from "react-router-dom";
-import { getCurrentUser, signOut } from "aws-amplify/auth";
+import { getCurrentUser, signOut, fetchUserAttributes } from "aws-amplify/auth";
 import logo from "../assets/logo.jpg";
 import { Languages } from "lucide-react";
+import { use } from "i18next";
 
 function NavBar(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
   const [language, setLanguage] = useState("en");
   const { t } = props;
 
   useEffect(() => {
-    setLanguage(props.i18n.language)
-    if (!props.user) {
-      getUser();
-    } else {
-      setUser(props.user);
-    }
+    setLanguage(props.i18n.language);
+  }, []);
 
+  useEffect(() => {
+    getUser();
   }, []);
 
   const logout = async () => {
@@ -36,49 +43,104 @@ function NavBar(props) {
 
   const getUser = async () => {
     try {
-      const user = await getCurrentUser();
-      console.log(user);
+      const user = await fetchUserAttributes();
+      setAuthChecked(true);
+      setAuthenticated(true);
       setUser(user);
     } catch (error) {
       console.error("Error getting current user:", error);
+      setAuthChecked(true);
+      setAuthenticated(false);
     }
   };
   return (
     <>
       <div class="navbar">
         <a onClick={() => navigate("/")} class="logo">
-          <img src={logo} alt="logo" className="logo-img" style={{ width: "70px", padding: "0px 10px" }} />
+          <img
+            src={logo}
+            alt="logo"
+            className="logo-img"
+            style={{ width: "70px", padding: "0px 10px" }}
+          />
           <span>{t("nav.logo-text")}</span>
         </a>
-        <div class="nav-links">
-          <a
-            onClick={() => navigate("/request")}
-            className={
-              location.pathname === "/request" ? "nar-link-active" : ""
-            }
-          >
-            {t("nav.links.links-req")}
-          </a>
-          <a
-            onClick={() => navigate("/requestList")}
-            className={
-              location.pathname === "/requestList" ? "nar-link-active" : ""
-            }
-          >
-            {t("nav.links.links-vol")}
-          </a>
-          <a
-            onClick={() => navigate("/dashboard")}
-            className={
-              location.pathname === "/dashboard" ? "nar-link-active" : ""
-            }
-          >
-            {t("nav.links.links-dash")}
-          </a>
-        </div>
-        {user ? (
+        {!authChecked ? (
+          <div class="nav-links">
+            <a
+              onClick={() => navigate("/request")}
+              className={
+                location.pathname === "/request" ? "nar-link-active" : ""
+              }
+            >
+              {t("nav.links.links-req")}
+            </a>
+          </div>
+        ) : authenticated && user["custom:role"] === "admin" ? (
+          <div class="nav-links">
+            <a
+              onClick={() => navigate("/request")}
+              className={
+                location.pathname === "/request" ? "nar-link-active" : ""
+              }
+            >
+              {t("nav.links.links-req")}
+            </a>
+            <a
+              onClick={() => navigate("/requestList")}
+              className={
+                location.pathname === "/requestList" ? "nar-link-active" : ""
+              }
+            >
+              {t("nav.links.links-vol")}
+            </a>
+            <a
+              onClick={() => navigate("/dashboard")}
+              className={
+                location.pathname === "/dashboard" ? "nar-link-active" : ""
+              }
+            >
+              {t("nav.links.links-dash")}
+            </a>
+            <a
+              onClick={() => navigate("/management")}
+              className={
+                location.pathname === "/management" ? "nar-link-active" : ""
+              }
+            >
+              {t("nav.links.links-management")}
+            </a>
+          </div>
+        ) : (
+          <div class="nav-links">
+            <a
+              onClick={() => navigate("/request")}
+              className={
+                location.pathname === "/request" ? "nar-link-active" : ""
+              }
+            >
+              {t("nav.links.links-req")}
+            </a>
+            <a
+              onClick={() => navigate("/requestList")}
+              className={
+                location.pathname === "/requestList" ? "nar-link-active" : ""
+              }
+            >
+              {t("nav.links.links-vol")}
+            </a>
+          </div>
+        )}
+
+        {authenticated ? (
           <div>
-            <Button variant="primary" class="regist-btn" onClick={() => logout()}>{t("nav.logout")}</Button>
+            <Button
+              variant="primary"
+              class="regist-btn"
+              onClick={() => logout()}
+            >
+              {t("nav.logout")}
+            </Button>
           </div>
         ) : (
           <div>
@@ -95,7 +157,7 @@ function NavBar(props) {
             const newLang = e.detail.id;
             console.log(e.detail);
             props.i18n.changeLanguage(newLang);
-            setLanguage(newLang)
+            setLanguage(newLang);
           }}
           items={[
             { text: "English", id: "en", disabled: language === "en" },

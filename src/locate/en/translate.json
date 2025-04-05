@@ -21,6 +21,10 @@
                 "label": "Username:",
                 "placeholder": "Enter your username"
             },
+            "phone_number": {
+                "label": "Phone number:",
+                "placeholder": "Enter your phone number"
+            },
             "confirm_code": {
                 "label": "Confirmation code:",
                 "placeholder": "Enter your confirmation code"
@@ -32,14 +36,17 @@
             "warning": "You need enter the important information",
             "cancel": "Cancel",
             "confirm": "Confirm",
-            "loading_text": "Loading"
+            "loading_text": "Loading",
+            "no_matches": "No matches found",
+            "clear_filter": "Clear filter"
         },
         "nav": {
             "logo-text": "DisasterRescue",
             "links": {
                 "links-req": "Request Help",
                 "links-vol": "Volunteer",
-                "links-dash": "Dashboard"
+                "links-dash": "Dashboard",
+                "links-management": "Management"
             },
             "login": "Login",
             "logout": "Logout"
@@ -250,6 +257,24 @@
             "of": "of",
             "req-l": "requests",
             "from_per_week": "from previous week"
+        },
+        "management_page": {
+            "title": "Management",
+            "des": "Manage volunteers",
+            "verify": "Verify",
+            "confirm_verify_title": "Confirm Verify Volunteer",
+            "confirm_verify_content": "Are you sure you want to verify this volunteer?",
+            "find_volunteer": "Find volunteers",
+            "username": "Username",
+            "email": "Email",
+            "phone": "Phone Number",
+            "success_verify": "Volunteer verified successfully! You can see them in Verified Tab",
+            "error_verify": "Failed to verify volunteer. Please try again.",
+            "no_volunteer": "No unverified volunteer",
+            "no_display": " No volunteer to display.",
+            "volunteers": "volunteers",
+            "unverified_tab": "Unverified Volunteers",
+            "verified_tab": "Verified Volunteers"
         }
     }
 }

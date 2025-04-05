@@ -29,6 +29,7 @@ import ResquestList from "./views/RequestList"
 import AuthForm from "./components/AuthForm";
 import Dashboard from "./views/Dashboard"
 import RequestDetail from "./views/RequestDetail"
+import VolunteerManagement from "./views/VolunteerManagement"
 
 Amplify.configure(awsExports)
 
@@ -59,6 +60,7 @@ root.render(
           <Route path="/auth" element={<AuthForm />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/requestList/:id" element={<RequestDetail />} />
+          <Route path="/management" element={<VolunteerManagement />} />
         </Routes>
       </BrowserRouter>
     </I18nextProvider>

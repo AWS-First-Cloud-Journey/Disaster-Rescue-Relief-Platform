@@ -33,8 +33,8 @@ function AuthForm(props) {
   const { t } = props;
 
   I18n.putVocabularies(translations);
-  //I18n.setLanguage(props.i18n.language);
-  I18n.setLanguage("mi");
+  I18n.setLanguage(props.i18n.language);
+  // I18n.setLanguage("mi");
 
   I18n.putVocabularies({
     mi: {
@@ -93,17 +93,23 @@ function AuthForm(props) {
         isRequired: true,
         order: 2
       },
+      phone_number: {
+        label: t("auth.phone_number.label"),
+        placeholder: t("auth.phone_number.placeholder"),
+        isRequired: true,
+        order: 3,
+      },
       password: {
         label: t("auth.password.label"),
         placeholder: t("auth.password.placeholder"),
         isRequired: true,
-        order: 3,
+        order: 4,
       },
       confirm_password: {
         label: t("auth.confirm_pass.label"),
         placeholder: t("auth.confirm_pass.placeholder"),
         isRequired: true,
-        order: 4,
+        order: 5,
       },
     },
     forgotPassword: {
