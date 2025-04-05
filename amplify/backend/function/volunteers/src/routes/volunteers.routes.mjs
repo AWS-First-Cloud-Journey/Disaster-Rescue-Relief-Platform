@@ -23,6 +23,11 @@ const cognito = new CognitoIdentityProvider({
 const ddbClient = new DynamoDBClient({ region: process.env.REGION || 'us-east-1' });
 const documentClient = DynamoDBDocumentClient.from(ddbClient);
 
+const VOLUNTEERS_TABLE_NAME = process.env.VOLUNTEERS_TABLE_NAME;
+if (!VOLUNTEERS_TABLE_NAME) {
+  console.error('VOLUNTEERS_TABLE_NAME environment variable not set');
+}
+
 const router = express.Router();
 
 // Get all volunteers with optional pagination
@@ -256,6 +261,11 @@ router.get('/:username', async (req, res) => {
 // Verify a volunteer (admin only) using PATCH
 router.patch('/:username/verify', async (req, res) => {
   try {
+    // Verify environment variable is set
+    if (!VOLUNTEERS_TABLE_NAME) {
+      return res.status(500).json({ error: 'VOLUNTEERS_TABLE_NAME environment variable not set' });
+    }
+
     // Verify admin status
     const adminId = req.headers['x-admin-id'];
     const isAdmin = req.headers['x-is-admin'] === 'true';
@@ -302,7 +312,7 @@ router.patch('/:username/verify', async (req, res) => {
 
     // First, check current verification status
     const getParams = {
-      TableName: 'volunteers',
+      TableName: VOLUNTEERS_TABLE_NAME,
       Key: {
         id: username,
         email: email
@@ -322,7 +332,7 @@ router.patch('/:username/verify', async (req, res) => {
 
     // Update the verification status
     const updateParams = {
-      TableName: 'volunteers',
+      TableName: VOLUNTEERS_TABLE_NAME,
       Key: {
         id: username,
         email: email
@@ -346,7 +356,7 @@ router.patch('/:username/verify', async (req, res) => {
     const historyKey = `verification_${timestamp}`;
 
     const historyUpdateParams = {
-      TableName: 'volunteers',
+      TableName: VOLUNTEERS_TABLE_NAME,
       Key: {
         id: username,
         email: email

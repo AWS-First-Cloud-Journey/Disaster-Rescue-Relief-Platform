@@ -80,6 +80,17 @@
                   "jyhKauZon"
                 ]
               ]
+            },
+            "VOLUNTEERS_TABLE_NAME": {
+              "Fn::Join": [
+                "",
+                [
+                  "volunteers-",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
             }
           }
         },

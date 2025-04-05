@@ -1,12 +1,25 @@
+// {
+//   "httpMethod": "GET",
+//   "path": "/volunteers/stats",
+//   "queryStringParameters": {
+//     "limit": "20"
+//   },
+//   "headers": {
+//     "Accept": "application/json"
+//   },
+//   "body": null,
+//   "isBase64Encoded": false
+// }
 {
-  "httpMethod": "GET",
-  "path": "/volunteers/stats",
-  "queryStringParameters": {
-    "limit": "20"
-  },
+  "httpMethod": "PATCH",
+  "path": "/volunteers/198aa5bc-c011-70b3-9c9d-81542215a209/verify",
+  "queryStringParameters": {},
   "headers": {
-    "Accept": "application/json"
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "x-admin-id": "f92ab5bc-e0a1-70e5-ab8a-2d7f83ee0798",
+    "x-is-admin": "true"
   },
-  "body": null,
+  "body": "{}",
   "isBase64Encoded": false
 }
