@@ -26,7 +26,17 @@
   "auth": {
     "emergencyresponseappd1b77548": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "emergencyresponseappd1b77548PostConfirmation",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -58,44 +68,15 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "emergencyresponseappd1b77548PostConfirmation": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "volunteers": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
-    }
-  },
-  "parameters": {
-    "AMPLIFY_function_emergencyInfor_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "emergencyInfor"
-        }
-      ]
-    },
-    "AMPLIFY_function_emergencyInfor_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "emergencyInfor"
-        }
-      ]
-    },
-    "AMPLIFY_function_volunteers_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "volunteers"
-        }
-      ]
-    },
-    "AMPLIFY_function_volunteers_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "volunteers"
-        }
-      ]
     }
   },
   "storage": {
@@ -111,6 +92,10 @@
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"
+    },
+    "volunteers": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
     }
   }
 }

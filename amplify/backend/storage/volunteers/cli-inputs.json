@@ -1,0 +1,31 @@
+{
+  "resourceName": "volunteers",
+  "tableName": "volunteers",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "email",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": [],
+  "additionalFields": [
+    {
+      "fieldName": "phone_number",
+      "fieldType": "number"
+    },
+    {
+      "fieldName": "full_name",
+      "fieldType": "string"
+    },
+    {
+      "fieldName": "history",
+      "fieldType": "String",
+      "isMap": true,
+      "mapKeyType": "String",
+      "mapValueType": "String"
+    }
+  ]
+}

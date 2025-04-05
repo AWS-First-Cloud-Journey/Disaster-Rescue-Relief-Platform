@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-emergencyresponseapp-stg-b41b5-unauthRole",
       "StackName": "amplify-emergencyresponseapp-stg-b41b5",
       "StackId": "arn:aws:cloudformation:ap-southeast-1:340879421878:stack/amplify-emergencyresponseapp-stg-b41b5/90e751f0-11bf-11f0-b523-02b6a031f731",
-      "AmplifyAppId": "d3othvwecqdkxl"
+      "AmplifyAppId": "d3othvwecqdkxl",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-emergencyresponseapp-stg-b41b5-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
@@ -23,6 +24,10 @@
         "volunteers": {
           "deploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
           "s3Key": "amplify-builds/volunteers-7478764c627669427a6d-build.zip"
+        },
+        "emergencyresponseappd1b77548PostConfirmation": {
+          "deploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
+          "s3Key": "amplify-builds/emergencyresponseappd1b77548PostConfirmation-4462366b33654c452b57-build.zip"
         }
       },
       "api": {
@@ -31,7 +36,8 @@
       "storage": {
         "EmergencyInfor": {},
         "requestHistory": {},
-        "requestershub": {}
+        "requestershub": {},
+        "volunteers": {}
       }
     }
   },
