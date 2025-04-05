@@ -10,6 +10,8 @@ export type AmplifyDependentResourcesAttributes = {
     "emergencyresponseappd1b77548": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
+      "IdentityPoolId": "string",
+      "IdentityPoolName": "string",
       "UserPoolArn": "string",
       "UserPoolId": "string",
       "UserPoolName": "string"

@@ -14,7 +14,7 @@ import {
 } from '../utils/volunteerUtils.mjs';
 import { historyService } from '../services/history.service.mjs';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, UpdateCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, UpdateCommand, GetCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
 
 // Initialize Cognito client with region
 const cognito = new CognitoIdentityProvider({
@@ -23,150 +23,109 @@ const cognito = new CognitoIdentityProvider({
 const ddbClient = new DynamoDBClient({ region: process.env.REGION || 'us-east-1' });
 const documentClient = DynamoDBDocumentClient.from(ddbClient);
 
-const VOLUNTEERS_TABLE_NAME = process.env.VOLUNTEERS_TABLE_NAME;
-if (!VOLUNTEERS_TABLE_NAME) {
-  console.error('VOLUNTEERS_TABLE_NAME environment variable not set');
+const tableName = process.env.VOLUNTEERS_TABLE_NAME;
+if (!tableName) {
+  console.error('tableName environment variable not set');
 }
 
 const router = express.Router();
 
-// Get all volunteers with optional pagination
+// Get all volunteers with optional pagination (admin only)
 router.get('/', async (req, res) => {
   try {
+    // Check environment variables
+    if (!tableName) {
+      return res.status(500).json({ error: 'VOLUNTEERS_TABLE_NAME environment variable not set' });
+    }
+
     const userPoolId = process.env.USER_POOL_ID;
     if (!userPoolId) {
       return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
     }
 
-    const limit = parseInt(req.query.limit) || 50;
-    const params = {
-      UserPoolId: userPoolId,
-      Limit: limit
-    };
+    // Extract user identity from Cognito Identity Pool ID
+    const authProvider = req.apiGateway?.event?.requestContext?.identity?.cognitoAuthenticationProvider;
 
-    if (req.query.token) {
-      params.PaginationToken = req.query.token;
+    let userId;
+    if (authProvider) {
+      const parts = authProvider.split(':');
+      userId = parts[parts.length - 1];
     }
 
-    // SDK v3 uses command pattern
-    const command = new ListUsersCommand(params);
-    const response = await cognito.send(command);
-
-    const volunteers = response.Users.map(formatVolunteerData);
-
-    res.json({
-      volunteers,
-      nextToken: response.PaginationToken
-    });
-  } catch (error) {
-    console.error('Error listing volunteers:', error);
-    res.status(500).json({ error: error.message || 'Failed to list volunteers' });
-  }
-});
-
-// Search volunteers by filter criteria
-router.get('/search', async (req, res) => {
-  try {
-    const userPoolId = process.env.USER_POOL_ID;
-    if (!userPoolId) {
-      return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
+    if (!userId) {
+      console.error('Missing identity information in request context:',
+        JSON.stringify(req.apiGateway?.event?.requestContext?.identity || {}, null, 2));
+      return res.status(401).json({ error: 'User identity not found in request' });
     }
 
-    const { attribute, value } = req.query;
-    if (!attribute || !value) {
-      return res.status(400).json({ error: 'attribute and value query parameters are required' });
-    }
-
-    const limit = parseInt(req.query.limit) || 50;
-    const params = {
-      UserPoolId: userPoolId,
-      Filter: `${attribute} = "${value}"`,
-      Limit: limit
-    };
-
-    if (req.query.token) {
-      params.PaginationToken = req.query.token;
-    }
-
-    const command = new ListUsersCommand(params);
-    const response = await cognito.send(command);
-
-    const volunteers = response.Users.map(formatVolunteerData);
-
-    res.json({
-      volunteers,
-      nextToken: response.PaginationToken
-    });
-  } catch (error) {
-    console.error('Error searching volunteers:', error);
-    res.status(500).json({ error: error.message || 'Failed to search volunteers' });
-  }
-});
-
-// NEW ROUTES FOR HISTORY TRACKING
-
-// Get history for a specific volunteer
-router.get('/:username/history', async (req, res) => {
-  try {
-    // First verify volunteer exists
-    const userPoolId = process.env.USER_POOL_ID;
-    if (!userPoolId) {
-      return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
-    }
-
+    // Check if user has admin role by querying Cognito
     try {
-      // Check if volunteer exists
       const params = {
         UserPoolId: userPoolId,
-        Username: req.params.username
+        Username: userId
       };
 
       const command = new AdminGetUserCommand(params);
-      await cognito.send(command);
-    } catch (error) {
-      if (error.name === 'UserNotFoundException') {
-        return res.status(404).json({ error: 'Volunteer not found' });
+      const response = await cognito.send(command);
+
+      // Check for admin role in user attributes
+      // This could be a custom attribute or group membership
+      const customRoleAttr = response.UserAttributes.find(
+        attr => attr.Name === 'custom:role'
+      );
+
+      const isAdmin = customRoleAttr && customRoleAttr.Value === 'admin';
+
+      if (!isAdmin) {
+        return res.status(403).json({
+          error: 'Access denied. Admin privileges required.'
+        });
       }
-      throw error;
+    } catch (error) {
+      console.error('Error verifying admin status:', error);
+      return res.status(401).json({ error: 'Could not verify admin status' });
     }
 
-    // Get volunteer history using the GSI
-    const history = await historyService.getVolunteerHistory(req.params.username);
+    // User is confirmed as admin, proceed with fetching volunteer data
 
-    // Calculate statistics
-    const stats = {
-      totalTasks: history.length,
-      tasksByStatus: {},
-      tasksByType: {},
-      completionRate: 0
+    // Parse pagination parameters
+    const limit = parseInt(req.query.limit) || 50;
+    const params = {
+      TableName: tableName,
+      Limit: limit
     };
 
-    if (history.length > 0) {
-      // Count tasks by final status
-      history.forEach(item => {
-        if (item.new_status) {
-          stats.tasksByStatus[item.new_status] = (stats.tasksByStatus[item.new_status] || 0) + 1;
-        }
+    // Add LastEvaluatedKey for pagination if provided
+    if (req.query.nextToken) {
+      try {
+        params.ExclusiveStartKey = JSON.parse(
+          Buffer.from(req.query.nextToken, 'base64').toString()
+        );
+      } catch (err) {
+        return res.status(400).json({ error: 'Invalid pagination token' });
+      }
+    }
 
-        // Count by action type
-        if (item.action_type) {
-          stats.tasksByType[item.action_type] = (stats.tasksByType[item.action_type] || 0) + 1;
-        }
-      });
+    // Execute scan operation
+    const command = new ScanCommand(params);
+    const result = await documentClient.send(command);
 
-      // Calculate completion rate
-      const completedTasks = stats.tasksByStatus.DONE || 0;
-      stats.completionRate = (completedTasks / history.length * 100).toFixed(2);
+    // Format the response
+    let nextToken = null;
+    if (result.LastEvaluatedKey) {
+      nextToken = Buffer.from(JSON.stringify(result.LastEvaluatedKey)).toString('base64');
     }
 
     res.json({
-      username: req.params.username,
-      history: history,
-      stats: stats
+      volunteers: result.Items || [],
+      nextToken: nextToken,
+      count: result.Count,
+      scannedCount: result.ScannedCount,
+      adminId: userId // Include who made the request for audit logs
     });
   } catch (error) {
-    console.error(`Error getting history for volunteer ${req.params.username}:`, error);
-    res.status(500).json({ error: error.message || 'Failed to get volunteer history' });
+    console.error('Error in volunteer list access:', error);
+    res.status(500).json({ error: error.message || 'Failed to list volunteers' });
   }
 });
 
@@ -229,113 +188,396 @@ router.get('/stats', async (req, res) => {
   }
 });
 
-// Get a specific volunteer by username
-router.get('/:username', async (req, res) => {
-  try {
-    const userPoolId = process.env.USER_POOL_ID;
-    if (!userPoolId) {
-      return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
-    }
-
-    const params = {
-      UserPoolId: userPoolId,
-      Username: req.params.username
-    };
-
-    const command = new AdminGetUserCommand(params);
-    const response = await cognito.send(command);
-    const volunteer = formatVolunteerData(response);
-
-    res.json(volunteer);
-  } catch (error) {
-    console.error(`Error getting volunteer ${req.params.username}:`, error);
-
-    if (error.name === 'UserNotFoundException') {
-      return res.status(404).json({ error: 'Volunteer not found' });
-    }
-
-    res.status(500).json({ error: error.message || 'Failed to get volunteer' });
-  }
-});
-
-// Verify a volunteer (admin only) using PATCH
-router.patch('/:username/verify', async (req, res) => {
+// Get all verified volunteers (admin only)
+router.get('/verified', async (req, res) => {
   try {
     // Verify environment variable is set
-    if (!VOLUNTEERS_TABLE_NAME) {
+    if (!tableName) {
       return res.status(500).json({ error: 'VOLUNTEERS_TABLE_NAME environment variable not set' });
     }
 
-    // Verify admin status
-    const adminId = req.headers['x-admin-id'];
-    const isAdmin = req.headers['x-is-admin'] === 'true';
-
-    if (!isAdmin) {
-      return res.status(403).json({ error: 'Admin privileges required for this operation' });
-    }
-
-    if (!adminId) {
-      return res.status(400).json({ error: 'Admin ID is required' });
-    }
-
     const userPoolId = process.env.USER_POOL_ID;
     if (!userPoolId) {
       return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
     }
 
-    // Get volunteer from Cognito to verify username and email
-    const username = req.params.username;
-    let email;
+    // Extract user identity from Cognito Identity Pool ID
+    const authProvider = req.apiGateway?.event?.requestContext?.identity?.cognitoAuthenticationProvider;
 
+    let userId;
+    if (authProvider) {
+      const parts = authProvider.split(':');
+      userId = parts[parts.length - 1];
+    }
+
+    if (!userId) {
+      console.error('Missing identity information in request context:',
+        JSON.stringify(req.apiGateway?.event?.requestContext?.identity || {}, null, 2));
+      return res.status(401).json({ error: 'User identity not found in request' });
+    }
+
+    // Check if user has admin role by querying Cognito
     try {
       const params = {
         UserPoolId: userPoolId,
-        Username: username
+        Username: userId
       };
 
       const command = new AdminGetUserCommand(params);
       const response = await cognito.send(command);
 
-      // Get email from user attributes
-      const emailAttr = response.UserAttributes.find(attr => attr.Name === 'email');
-      if (!emailAttr) {
-        return res.status(400).json({ error: 'Volunteer email not found' });
-      }
+      // Check for admin role in user attributes
+      // This could be a custom attribute or group membership
+      const customRoleAttr = response.UserAttributes.find(
+        attr => attr.Name === 'custom:role'
+      );
 
-      email = emailAttr.Value;
-    } catch (error) {
-      if (error.name === 'UserNotFoundException') {
-        return res.status(404).json({ error: 'Volunteer not found' });
+      const isAdmin = customRoleAttr && customRoleAttr.Value === 'admin';
+
+      if (!isAdmin) {
+        return res.status(403).json({
+          error: 'Access denied. Admin privileges required.'
+        });
       }
-      throw error;
+    } catch (error) {
+      console.error('Error verifying admin status:', error);
+      return res.status(401).json({ error: 'Could not verify admin status' });
     }
 
-    // First, check current verification status
-    const getParams = {
-      TableName: VOLUNTEERS_TABLE_NAME,
-      Key: {
-        id: username,
-        email: email
-      }
+    // Admin is confirmed, continue with listing verified volunteers
+
+    // Parse pagination parameters
+    const limit = parseInt(req.query.limit) || 50;
+    const params = {
+      TableName: tableName,
+      FilterExpression: 'is_verified = :verificationStatus',
+      ExpressionAttributeValues: {
+        ':verificationStatus': true
+      },
+      Limit: limit
     };
 
-    const getCommand = new GetCommand(getParams);
-    const currentRecord = await documentClient.send(getCommand);
-
-    if (!currentRecord.Item) {
-      return res.status(404).json({ error: 'Volunteer record not found in database' });
+    // Add LastEvaluatedKey for pagination if provided
+    if (req.query.nextToken) {
+      try {
+        // The nextToken is passed as a base64 encoded string to avoid JSON parsing issues
+        params.ExclusiveStartKey = JSON.parse(Buffer.from(req.query.nextToken, 'base64').toString());
+      } catch (err) {
+        return res.status(400).json({ error: 'Invalid pagination token' });
+      }
     }
 
-    if (currentRecord.Item.is_verified) {
+    // Execute scan operation
+    const command = new ScanCommand(params);
+    const result = await documentClient.send(command);
+
+    // Format the response
+    let nextToken = null;
+    if (result.LastEvaluatedKey) {
+      // Encode the LastEvaluatedKey to make it URL-friendly
+      nextToken = Buffer.from(JSON.stringify(result.LastEvaluatedKey)).toString('base64');
+    }
+
+    res.json({
+      verifiedVolunteers: result.Items || [],
+      nextToken: nextToken,
+      count: result.Count,
+      scannedCount: result.ScannedCount,
+      adminId: userId // Include who made the request for audit logs
+    });
+  } catch (error) {
+    console.error('Error listing verified volunteers:', error);
+    res.status(500).json({ error: error.message || 'Failed to list verified volunteers' });
+  }
+});
+
+// Get all unverified volunteers (admin only)
+router.get('/unverified', async (req, res) => {
+  try {
+    // Verify environment variable is set
+    if (!tableName) {
+      return res.status(500).json({ error: 'VOLUNTEERS_TABLE_NAME environment variable not set' });
+    }
+
+    const userPoolId = process.env.USER_POOL_ID;
+    if (!userPoolId) {
+      return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
+    }
+
+    // Extract user identity from Cognito Identity Pool ID
+    const authProvider = req.apiGateway?.event?.requestContext?.identity?.cognitoAuthenticationProvider;
+
+    let userId;
+    if (authProvider) {
+      const parts = authProvider.split(':');
+      userId = parts[parts.length - 1];
+    }
+
+    if (!userId) {
+      console.error('Missing identity information in request context:',
+        JSON.stringify(req.apiGateway?.event?.requestContext?.identity || {}, null, 2));
+      return res.status(401).json({ error: 'User identity not found in request' });
+    }
+
+    // Check if user has admin role by querying Cognito
+    try {
+      const params = {
+        UserPoolId: userPoolId,
+        Username: userId
+      };
+
+      const command = new AdminGetUserCommand(params);
+      const response = await cognito.send(command);
+
+      // Check for admin role in user attributes
+      // This could be a custom attribute or group membership
+      const customRoleAttr = response.UserAttributes.find(
+        attr => attr.Name === 'custom:role'
+      );
+
+      const isAdmin = customRoleAttr && customRoleAttr.Value === 'admin';
+
+      if (!isAdmin) {
+        return res.status(403).json({
+          error: 'Access denied. Admin privileges required.'
+        });
+      }
+    } catch (error) {
+      console.error('Error verifying admin status:', error);
+      return res.status(401).json({ error: 'Could not verify admin status' });
+    }
+
+    // Admin is confirmed, continue with listing unverified volunteers
+
+    // Parse pagination parameters
+    const limit = parseInt(req.query.limit) || 50;
+    const params = {
+      TableName: tableName,
+      FilterExpression: 'is_verified = :verificationStatus OR attribute_not_exists(is_verified)',
+      ExpressionAttributeValues: {
+        ':verificationStatus': false
+      },
+      Limit: limit
+    };
+
+    // Add LastEvaluatedKey for pagination if provided
+    if (req.query.nextToken) {
+      try {
+        // The nextToken is passed as a base64 encoded string to avoid JSON parsing issues
+        params.ExclusiveStartKey = JSON.parse(Buffer.from(req.query.nextToken, 'base64').toString());
+      } catch (err) {
+        return res.status(400).json({ error: 'Invalid pagination token' });
+      }
+    }
+
+    // Execute scan operation
+    const command = new ScanCommand(params);
+    const result = await documentClient.send(command);
+
+    // Format the response
+    let nextToken = null;
+    if (result.LastEvaluatedKey) {
+      // Encode the LastEvaluatedKey to make it URL-friendly
+      nextToken = Buffer.from(JSON.stringify(result.LastEvaluatedKey)).toString('base64');
+    }
+
+    res.json({
+      unverifiedVolunteers: result.Items || [],
+      nextToken: nextToken,
+      count: result.Count,
+      scannedCount: result.ScannedCount,
+      adminId: userId // Include who made the request for audit logs
+    });
+  } catch (error) {
+    console.error('Error listing unverified volunteers:', error);
+    res.status(500).json({ error: error.message || 'Failed to list unverified volunteers' });
+  }
+});
+
+// Get a specific volunteer by id (admin only)
+router.get('/:id', async (req, res) => {
+  try {
+    // Verify environment variable is set
+    if (!tableName) {
+      return res.status(500).json({ error: 'VOLUNTEERS_TABLE_NAME environment variable not set' });
+    }
+
+    const userPoolId = process.env.USER_POOL_ID;
+    if (!userPoolId) {
+      return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
+    }
+
+    // Extract user identity from Cognito Identity Pool ID
+    const authProvider = req.apiGateway?.event?.requestContext?.identity?.cognitoAuthenticationProvider;
+
+    let userId;
+    if (authProvider) {
+      const parts = authProvider.split(':');
+      userId = parts[parts.length - 1];
+    }
+
+    if (!userId) {
+      console.error('Missing identity information in request context:',
+        JSON.stringify(req.apiGateway?.event?.requestContext?.identity || {}, null, 2));
+      return res.status(401).json({ error: 'User identity not found in request' });
+    }
+
+    // Check if user has admin role by querying Cognito
+    try {
+      const params = {
+        UserPoolId: userPoolId,
+        Username: userId
+      };
+
+      const command = new AdminGetUserCommand(params);
+      const response = await cognito.send(command);
+
+      // Check for admin role in user attributes
+      const customRoleAttr = response.UserAttributes.find(
+        attr => attr.Name === 'custom:role'
+      );
+
+      const isAdmin = customRoleAttr && customRoleAttr.Value === 'admin';
+
+      if (!isAdmin) {
+        return res.status(403).json({
+          error: 'Access denied. Admin privileges required.'
+        });
+      }
+    } catch (error) {
+      console.error('Error verifying admin status:', error);
+      return res.status(401).json({ error: 'Could not verify admin status' });
+    }
+
+    // Admin is confirmed, proceed with retrieving volunteer data
+
+    const volunteerId = req.params.id;
+    if (!volunteerId) {
+      return res.status(400).json({ error: 'Volunteer ID is required' });
+    }
+
+    // Find volunteer in DynamoDB using scan with filter
+    // Note: For production with large datasets, consider adding a GSI on the id field
+    const scanParams = {
+      TableName: tableName,
+      FilterExpression: 'id = :idValue',
+      ExpressionAttributeValues: {
+        ':idValue': volunteerId
+      },
+      Limit: 1 // We only need the first match
+    };
+
+    const scanCommand = new ScanCommand(scanParams);
+    const scanResult = await documentClient.send(scanCommand);
+
+    if (!scanResult.Items || scanResult.Items.length === 0) {
+      return res.status(404).json({ error: 'Volunteer not found' });
+    }
+
+    // Return the volunteer data
+    const volunteer = scanResult.Items[0];
+
+    res.json({
+      volunteer: volunteer,
+      adminId: userId // Include who made the request for audit logs
+    });
+  } catch (error) {
+    console.error(`Error getting volunteer ${req.params.id}:`, error);
+    res.status(500).json({ error: error.message || 'Failed to get volunteer' });
+  }
+});
+
+// Verify a volunteer (admin only) using PATCH
+router.patch('/:id/verify', async (req, res) => {
+  try {
+    // Check environment variables
+    if (!tableName) {
+      return res.status(500).json({ error: 'VOLUNTEERS_TABLE_NAME environment variable not set' });
+    }
+
+    const userPoolId = process.env.USER_POOL_ID;
+    if (!userPoolId) {
+      return res.status(500).json({ error: 'USER_POOL_ID environment variable not set' });
+    }
+
+    // Extract user identity from Cognito Identity Pool ID
+    const authProvider = req.apiGateway?.event?.requestContext?.identity?.cognitoAuthenticationProvider;
+
+    let adminId;
+    if (authProvider) {
+      const parts = authProvider.split(':');
+      adminId = parts[parts.length - 1];
+    }
+
+    if (!adminId) {
+      console.error('Missing identity information in request context:',
+        JSON.stringify(req.apiGateway?.event?.requestContext?.identity || {}, null, 2));
+      return res.status(401).json({ error: 'User identity not found in request' });
+    }
+
+    // Check if user has admin role by querying Cognito
+    try {
+      const params = {
+        UserPoolId: userPoolId,
+        Username: adminId
+      };
+
+      const command = new AdminGetUserCommand(params);
+      const response = await cognito.send(command);
+
+      // Check for admin role in user attributes
+      const customRoleAttr = response.UserAttributes.find(
+        attr => attr.Name === 'custom:role'
+      );
+
+      const isAdmin = customRoleAttr && customRoleAttr.Value === 'admin';
+
+      if (!isAdmin) {
+        return res.status(403).json({
+          error: 'Access denied. Admin privileges required.'
+        });
+      }
+    } catch (error) {
+      console.error('Error verifying admin status:', error);
+      return res.status(401).json({ error: 'Could not verify admin status' });
+    }
+
+    // Admin is confirmed, proceed with verification
+
+    // Get volunteer information
+    const volunteerId = req.params.id;
+
+    // Find volunteer in DynamoDB
+    // Note: For production with large datasets, consider adding a GSI on the id field
+    const scanParams = {
+      TableName: tableName,
+      FilterExpression: 'id = :idValue',
+      ExpressionAttributeValues: {
+        ':idValue': volunteerId
+      },
+      Limit: 1 // We only need the first match
+    };
+
+    const scanCommand = new ScanCommand(scanParams);
+    const scanResult = await documentClient.send(scanCommand);
+
+    if (!scanResult.Items || scanResult.Items.length === 0) {
+      return res.status(404).json({ error: 'Volunteer not found' });
+    }
+
+    const volunteer = scanResult.Items[0];
+
+    // Check if already verified
+    if (volunteer.is_verified) {
       return res.status(400).json({ error: 'Volunteer is already verified' });
     }
 
     // Update the verification status
     const updateParams = {
-      TableName: VOLUNTEERS_TABLE_NAME,
+      TableName: tableName,
       Key: {
-        id: username,
-        email: email
+        id: volunteer.id,
+        email: volunteer.email
       },
       UpdateExpression: 'SET is_verified = :verified, is_verified_by = :admin',
       ExpressionAttributeValues: {
@@ -349,17 +591,17 @@ router.patch('/:username/verify', async (req, res) => {
     const result = await documentClient.send(updateCommand);
 
     // Log the verification
-    console.log(`Volunteer ${username} verified by admin ${adminId}`);
+    console.log(`Volunteer ${volunteerId} verified by admin ${adminId}`);
 
     // Record this action in the volunteer's history
     const timestamp = new Date().toISOString();
     const historyKey = `verification_${timestamp}`;
 
     const historyUpdateParams = {
-      TableName: VOLUNTEERS_TABLE_NAME,
+      TableName: tableName,
       Key: {
-        id: username,
-        email: email
+        id: volunteer.id,
+        email: volunteer.email
       },
       UpdateExpression: 'SET history.#historyKey = :historyValue',
       ExpressionAttributeNames: {
@@ -382,7 +624,7 @@ router.patch('/:username/verify', async (req, res) => {
       volunteer: result.Attributes
     });
   } catch (error) {
-    console.error(`Error verifying volunteer ${req.params.username}:`, error);
+    console.error(`Error verifying volunteer ${req.params.id}:`, error);
     res.status(500).json({ error: error.message || 'Failed to verify volunteer' });
   }
 });
