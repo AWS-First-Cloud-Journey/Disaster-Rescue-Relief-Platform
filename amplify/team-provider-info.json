@@ -27,7 +27,7 @@
         },
         "emergencyresponseappd1b77548PostConfirmation": {
           "deploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
-          "s3Key": "amplify-builds/emergencyresponseappd1b77548PostConfirmation-4462366b33654c452b57-build.zip"
+          "s3Key": "amplify-builds/emergencyresponseappd1b77548PostConfirmation-652b7239444b50587848-build.zip"
         }
       },
       "api": {

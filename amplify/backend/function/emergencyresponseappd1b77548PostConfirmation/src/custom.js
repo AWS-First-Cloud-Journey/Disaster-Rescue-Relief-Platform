@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
-const TABLE_NAME = 'volunteers';
+const tableName = process.env.VOLUNTEERS_TABLE_NAME;
 
 /**
  * Main handler function that determines event type and delegates accordingly
@@ -124,7 +124,7 @@ async function saveCognitoUserToVolunteers(event) {
 
     // Create DynamoDB params
     const params = {
-      TableName: TABLE_NAME,
+      TableName: tableName,
       Item: volunteerData,
       // Use conditional write to avoid overwriting existing records
       ConditionExpression: 'attribute_not_exists(id) AND attribute_not_exists(email)'
@@ -165,7 +165,7 @@ async function createVolunteer(data) {
   };
 
   const params = {
-    TableName: TABLE_NAME,
+    TableName: tableName,
     Item: item,
     ConditionExpression: 'attribute_not_exists(id) AND attribute_not_exists(email)'
   };
@@ -189,7 +189,7 @@ async function getVolunteer(data) {
   }
 
   const params = {
-    TableName: TABLE_NAME,
+    TableName: tableName,
     Key: {
       id,
       email
@@ -209,7 +209,7 @@ async function getVolunteer(data) {
  */
 async function listVolunteers() {
   const params = {
-    TableName: TABLE_NAME
+    TableName: tableName
   };
 
   const result = await docClient.scan(params).promise();
@@ -256,7 +256,7 @@ async function updateVolunteer(data) {
   });
 
   const params = {
-    TableName: TABLE_NAME,
+    TableName: tableName,
     Key: {
       id,
       email
@@ -286,7 +286,7 @@ async function deleteVolunteer(data) {
   }
 
   const params = {
-    TableName: TABLE_NAME,
+    TableName: tableName,
     Key: {
       id,
       email
