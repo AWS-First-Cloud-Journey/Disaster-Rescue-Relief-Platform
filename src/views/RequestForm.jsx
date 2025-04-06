@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Outlet } from "react-router-dom";
 import {
   Flashbar,
   FileInput,
@@ -161,8 +162,8 @@ function RequestForm(props) {
   };
 
   return <>
-    <NavBar />
-
+    {/* <NavBar /> */}
+    <Outlet />
     <div class="container">
       <h1>{t("request-page.title")}</h1>
       <div class="subtitle">{t("request-page.desc")}</div>

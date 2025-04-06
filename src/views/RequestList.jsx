@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Outlet } from "react-router-dom";
 import { get, patch } from "aws-amplify/api";
 import { getCurrentUser, fetchUserAttributes } from "aws-amplify/auth";
 import { withTranslation } from "react-i18next";
@@ -306,7 +306,8 @@ function RequestList(props) {
         <Navigate to="/auth" />
       ) : (
         <>
-          <NavBar user={user} />
+          {/* <NavBar user={user} /> */}
+          <Outlet />
           <div class="container">
             <SpaceBetween size="m">
               <BreadcrumbGroup

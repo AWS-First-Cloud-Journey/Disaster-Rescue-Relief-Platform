@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { navigate, useNavigate } from "react-router-dom";
+import { navigate, useNavigate, Outlet } from "react-router-dom";
 import { get } from "aws-amplify/api";
 import NavBar from "../components/NavBar";
 import { withTranslation } from "react-i18next";
@@ -70,8 +70,8 @@ function Home(props) {
           </button>
         </div>
       </div> */}
-      <NavBar />
-
+      {/* <NavBar /> */}
+      <Outlet />
       <div class="hero">
         <h1>{t("home.title")}</h1>
         <p>

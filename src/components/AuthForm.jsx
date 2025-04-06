@@ -81,9 +81,9 @@ function AuthForm(props) {
       },
     },
     signUp: {
-      username: {
-        label: t("auth.username.label"),
-        placeholder: t("auth.username.placeholder"),
+      name: {
+        label: t("auth.name.label"),
+        placeholder: t("auth.name.placeholder"),
         isRequired: true,
         order: 1
       },

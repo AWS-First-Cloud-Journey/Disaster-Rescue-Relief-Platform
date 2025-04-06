@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Navigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, Navigate, useLocation, Outlet } from 'react-router-dom';
 import { get, patch } from 'aws-amplify/api';
 import { getUrl } from 'aws-amplify/storage';
 import { fetchUserAttributes } from "aws-amplify/auth";
@@ -329,7 +329,8 @@ function RequestDetail(props) {
 
   return (
     <>
-      <NavBar user={user} />
+      {/* <NavBar user={user} /> */}
+      <Outlet />
       {notification.visible && (
         <Flashbar
           items={[

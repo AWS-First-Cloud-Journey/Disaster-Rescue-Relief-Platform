@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, Outlet } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import { DynamoDBClient, RequestLimitExceeded } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, ScanCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { get } from "aws-amplify/api";
+import { fetchUserAttributes } from "aws-amplify/auth";
 import { withTranslation } from "react-i18next";
 import './Dashboard.css';
 
@@ -28,6 +29,7 @@ const volunteersPath = "/volunteers";
 const Dashboard = (props) => {
   // State for date range
   const { t } = props;
+  const navigate = useNavigate();
   const [startDate, setStartDate] = useState('03/26/2025');
   const [endDate, setEndDate] = useState('04/04/2025');
 
@@ -57,9 +59,28 @@ const Dashboard = (props) => {
   const [totalRequests, setTotalRequests] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [user, setUser] = useState(null);
   const itemsPerPage = 6;
   const [requestSum, setRequestSum] = useState([]);
   const [volunteer, setVolunteer] = useState([]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await fetchUserAttributes();
+        if (user["custom:role"] !== "admin") { 
+          navigate("/");
+        }
+        setUser(user);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        // Handle error (e.g., redirect to login)
+        navigate("/auth");
+        // setLogin(false);
+      } 
+    };
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     // getAllRequests();
@@ -276,7 +297,8 @@ const Dashboard = (props) => {
 
   return (
     <>
-      <NavBar />
+      {/* <NavBar user={user}/> */}
+      <Outlet />
       <div className="dashboard-container">
         {/* Dashboard Title */}
         <div className="dashboard-header">

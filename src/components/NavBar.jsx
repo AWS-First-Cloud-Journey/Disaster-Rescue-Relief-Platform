@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, Link } from "react-router-dom";
 import {
   TopNavigation,
   Input,
   ButtonDropdown,
-  Link,
   Button,
 } from "@cloudscape-design/components";
 import { withTranslation } from "react-i18next";
@@ -34,6 +33,8 @@ function NavBar(props) {
   const logout = async () => {
     try {
       await signOut();
+      setAuthenticated(false);
+      setAuthChecked(false);
       setUser(null);
       navigate("/");
     } catch (error) {
@@ -44,6 +45,8 @@ function NavBar(props) {
   const getUser = async () => {
     try {
       const user = await fetchUserAttributes();
+      const user1 = await getCurrentUser();
+      console.log("user", user1);
       setAuthChecked(true);
       setAuthenticated(true);
       setUser(user);
@@ -55,7 +58,7 @@ function NavBar(props) {
   };
   return (
     <>
-      <div class="navbar">
+      <nav class="navbar">
         <a onClick={() => navigate("/")} class="logo">
           <img
             src={logo}
@@ -166,7 +169,7 @@ function NavBar(props) {
         >
           {language === "en" ? "English" : "Burmese"}
         </ButtonDropdown>
-      </div>
+      </nav>
     </>
   );
 }

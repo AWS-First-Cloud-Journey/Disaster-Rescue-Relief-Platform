@@ -1,280 +1,284 @@
 {
-    "translation": {
-        "auth": {
-            "password": {
-                "label": "Password:",
-                "placeholder": "Enter your password"
-            },
-            "confirm_pass": {
-                "label": "Confirm password:",
-                "placeholder": "Enter your password again"
-            },
-            "role": {
-                "label": "Role",
-                "volunteer": "Volunteer"
-            },
-            "email": {
-                "label": "Email:",
-                "placeholder": "Enter your email"
-            },
-            "username": {
-                "label": "Username:",
-                "placeholder": "Enter your username"
-            },
-            "phone_number": {
-                "label": "Phone number:",
-                "placeholder": "Enter your phone number"
-            },
-            "confirm_code": {
-                "label": "Confirmation code:",
-                "placeholder": "Enter your confirmation code"
-            }
+  "translation": {
+    "auth": {
+      "password": {
+        "label": "Password:",
+        "placeholder": "Enter your password"
+      },
+      "confirm_pass": {
+        "label": "Confirm password:",
+        "placeholder": "Enter your password again"
+      },
+      "role": {
+        "label": "Role",
+        "volunteer": "Volunteer"
+      },
+      "email": {
+        "label": "Email:",
+        "placeholder": "Enter your email"
+      },
+      "username": {
+        "label": "Username:",
+        "placeholder": "Enter your username"
+      },
+      "name": {
+        "label": "Name:",
+        "placeholder": "Enter your name"
+      },
+      "phone_number": {
+        "label": "Phone number:",
+        "placeholder": "Enter your phone number"
+      },
+      "confirm_code": {
+        "label": "Confirmation code:",
+        "placeholder": "Enter your confirmation code"
+      }
+    },
+    "common": {
+      "successMes": "Created success",
+      "errorMes": "Error! An error occurred. Please try again later",
+      "warning": "You need enter the important information",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "loading_text": "Loading",
+      "no_matches": "No matches found",
+      "clear_filter": "Clear filter"
+    },
+    "nav": {
+      "logo-text": "DisasterRescue",
+      "links": {
+        "links-req": "Request Help",
+        "links-vol": "Volunteer",
+        "links-dash": "Dashboard",
+        "links-management": "Management"
+      },
+      "login": "Login",
+      "logout": "Logout"
+    },
+    "home": {
+      "home": "Home",
+      "title": "Disaster Rescue & Relief Platform",
+      "des": "Connecting those in need with volunteers and resources during disaster situations",
+      "req": {
+        "title": "Request Help",
+        "desc": "Submit requests for assistance during disasters.\n\n If you're in an affected area, request emergency supplies, medical assistance, or evacuation help.",
+        "btn-txt": "Request Help"
+      },
+      "vol": {
+        "title": "Volunteer",
+        "desc": "Join rescue efforts and fulfill assistance requests\n\n Verify requests, coordinate with donors, and deliver essential supplies to those in need.",
+        "btn-txt": "Volunteer Now"
+      },
+      "dash": {
+        "title": "Requests Dashboard",
+        "desc": "Visualize requests and resource allocation\n\n Access real-time data on help requests, resource distribution, and volunteer activities.",
+        "btn-txt": "View Dashboard"
+      },
+      "disaster-title": "Current Disaster Status",
+      "disaster-infor": {
+        "1": "Active Requests",
+        "2": "Volunteers",
+        "3": "Fulfilled Requests",
+        "4": "Affected Areas"
+      }
+    },
+    "request-page": {
+      "title": "Request Help",
+      "desc": "Submit your request for assistance during this disaster situation",
+      "form": {
+        "title": "Location & Contact Information",
+        "desc": "Provide details about your location and how to contact you",
+        "name": "Full Name",
+        "name_place": "Enter your full name",
+        "phone": "Phone Number",
+        "phone_place": "Enter your phone number",
+        "address": "Address",
+        "address_place": "Enter your address",
+        "location": "Google Maps Link (if available)",
+        "location_place": "Enter Google Maps link",
+        "location_desc": "Sharing your precise location helps rescue teams reach you faster",
+        "individuals": "Estimated Number of Affected Individuals",
+        "individuals_place": "Enter the estimated number of affected individuals",
+        "type": "Request Type",
+        "supply": "Medical Supplies",
+        "supply_desc": "First aid kits, medications, bandages, etc.",
+        "bag": "Sleeping Bags",
+        "bag_desc": "Number of sleeping bags needed",
+        "water": "Water",
+        "water_desc": "Number of bottles needed",
+        "food": "Food",
+        "food_desc": "Number of meals needed",
+        "shelter": "Shelter",
+        "shelter_desc": "Number of tents or other shelter items needed",
+        "body_bag": "Body Bags",
+        "body_bag_desc": "Number of body bags needed",
+        "image": "Upload Image (Optional)",
+        "img-btn": "Choose files",
+        "img_uploaded": "No file chosen",
+        "img_desc": "Upload photos of the situation to help response teams better understand your needs",
+        "file_name": "File Name",
+        "file_size": "File Size",
+        "quanity": "Quantity needed:",
+        "quatity_liter": "Quantity needed (liters)",
+        "submit": "Submit"
+      },
+      "success_mess": "Created success",
+      "error_mess": "Error! An error occurred. Please try again later",
+      "warning_mess": "You need enter the important information"
+    },
+    "volunteer-page": {
+      "title": "Requests List",
+      "des": "Join rescue efforts and fulfill assistance requests",
+      "card": {
+        "title": "Request",
+        "name": "Name",
+        "phone": "Phone Number",
+        "status": "Status",
+        "location": "Location",
+        "people": "People Affected",
+        "createdAt": "Date Requested",
+        "completed": "Completed",
+        "in-progress-l": "In Progress",
+        "in-progress-u": "IN PROGRESS",
+        "done": "DONE",
+        "pending-u": "PENDING",
+        "pending-l": "Pending",
+        "claim-btn": "Claim",
+        "done-btn": "Done",
+        "assign-btn": "Assign",
+        "reset-btn": "Reset",
+        "find": "Find requests",
+        "filter-title": "Filter status",
+        "status-filter": {
+          "any": "Any Status",
+          "pending": "PENDING",
+          "in-progress": "IN PROGRESS",
+          "done": "DONE"
         },
-        "common": {
-            "successMes": "Created success",
-            "errorMes": "Error! An error occurred. Please try again later",
-            "warning": "You need enter the important information",
-            "cancel": "Cancel",
-            "confirm": "Confirm",
-            "loading_text": "Loading",
-            "no_matches": "No matches found",
-            "clear_filter": "Clear filter"
+        "page-size": "Page size",
+        "visible-content": "Select visible content",
+        "visible-desc": "Main distribution properties",
+        "pre": "Preferences",
+        "create_request": "Create Request",
+        "no_req": "No request found",
+        "req": "requests"
+      },
+      "confirm_title_1": "Confirm Request Claim",
+      "confirm_mess_1": "Are you sure you want to claim this request? You will be responsible for fulfilling it.",
+      "confirm_title_2": "Confirm Completion",
+      "confirm_mess_2": "Are you sure you want to mark this request as complete? This action cannot be undone.",
+      "confirm_title_3": "Reset Request Status",
+      "confirm_mess_3": "Are you sure you want to change this request status back to PENDING? This will make it available for volunteers to claim again.",
+      "fail_mess": "Failed to claim request. Please try again."
+    },
+    "detail-request-page": {
+      "title": "Request",
+      "card": {
+        "title_infor": "Request Information",
+        "completed": "COMPLETED",
+        "mark_completed": "Mark as Complete",
+        "name": "Name",
+        "phone": "Phone Number",
+        "address": "Address",
+        "people": "People Affected",
+        "title_status": "Request Status",
+        "status": "Status",
+        "in_progress": "IN_PROGRESS",
+        "done": "DONE",
+        "pending": "PENDING",
+        "createdAt": "Date Requested",
+        "assign_to": "Assigned To",
+        "title_supply": "Requested Supplies",
+        "supply": "Medical Supplies",
+        "unit": "units",
+        "bag": "Sleeping Bags",
+        "water": "Water",
+        "water_unit": "liters",
+        "food": "Food",
+        "food_unit": "meals",
+        "shelter": "Shelter",
+        "shelter_unit": "People",
+        "body_bag": "Body Bags",
+        "location": "Location",
+        "view_map": "View Location on Map",
+        "image": "Image"
+      },
+      "error_reload": "Could not reload request details",
+      "error_login": "You need to be logged in with a valid account to claim this request",
+      "success_claim": "Request marked as completed!",
+      "error_claim": "Failed to claim request. Please try again.",
+      "success_remark": "Request marked as completed!",
+      "error_remark": "Failed to update request status. Please try again.",
+      "success_reset": "Request marked as completed!",
+      "error_reset": "Failed to update request status. Please try again."
+    },
+    "dashboard-page": {
+      "title": "Dashboard",
+      "des": "Visualize requests and resource allocation",
+      "data-text": "Data range:",
+      "to": "to",
+      "apply": "Apply",
+      "export-data": "Export Data",
+      "card": {
+        "active-req": "Active Requests",
+        "vol": "Volunteers",
+        "fulfilled": "Fulfilled Requests",
+        "affected": "Affected Areas",
+        "no-data": "No change from previous week"
+      },
+      "chart": {
+        "title": "Request Types",
+        "time": {
+          "time-1": "7 Days",
+          "time-2": "30 Days",
+          "time-3": "All Time"
         },
-        "nav": {
-            "logo-text": "DisasterRescue",
-            "links": {
-                "links-req": "Request Help",
-                "links-vol": "Volunteer",
-                "links-dash": "Dashboard",
-                "links-management": "Management"
-            },
-            "login": "Login",
-            "logout": "Logout"
-        },
-        "home": {
-            "home": "Home",
-            "title": "Disaster Rescue & Relief Platform",
-            "des": "Connecting those in need with volunteers and resources during disaster situations",
-            "req": {
-                "title": "Request Help",
-                "desc": "Submit requests for assistance during disasters.\n\n If you're in an affected area, request emergency supplies, medical assistance, or evacuation help.",
-                "btn-txt": "Request Help"
-            },
-            "vol": {
-                "title": "Volunteer",
-                "desc": "Join rescue efforts and fulfill assistance requests\n\n Verify requests, coordinate with donors, and deliver essential supplies to those in need.",
-                "btn-txt": "Volunteer Now"
-            },
-            "dash": {
-                "title": "Requests Dashboard",
-                "desc": "Visualize requests and resource allocation\n\n Access real-time data on help requests, resource distribution, and volunteer activities.",
-                "btn-txt": "View Dashboard"
-            },
-            "disaster-title": "Current Disaster Status",
-            "disaster-infor": {
-                "1": "Active Requests",
-                "2": "Volunteers",
-                "3": "Fulfilled Requests",
-                "4": "Affected Areas"
-            }
-        },
-        "request-page": {
-            "title": "Request Help",
-            "desc": "Submit your request for assistance during this disaster situation",
-            "form": {
-                "title": "Location & Contact Information",
-                "desc": "Provide details about your location and how to contact you",
-                "name": "Full Name",
-                "name_place": "Enter your full name",
-                "phone": "Phone Number",
-                "phone_place": "Enter your phone number",
-                "address": "Address",
-                "address_place": "Enter your address",
-                "location": "Google Maps Link (if available)",
-                "location_place": "Enter Google Maps link",
-                "location_desc": "Sharing your precise location helps rescue teams reach you faster",
-                "individuals": "Estimated Number of Affected Individuals",
-                "individuals_place": "Enter the estimated number of affected individuals",
-                "type": "Request Type",
-                "supply": "Medical Supplies",
-                "supply_desc": "First aid kits, medications, bandages, etc.",
-                "bag": "Sleeping Bags",
-                "bag_desc": "Number of sleeping bags needed",
-                "water": "Water",
-                "water_desc": "Number of bottles needed",
-                "food": "Food",
-                "food_desc": "Number of meals needed",
-                "shelter": "Shelter",
-                "shelter_desc": "Number of tents or other shelter items needed",
-                "body_bag": "Body Bags",
-                "body_bag_desc": "Number of body bags needed",
-                "image": "Upload Image (Optional)",
-                "img-btn": "Choose files",
-                "img_uploaded": "No file chosen",
-                "img_desc": "Upload photos of the situation to help response teams better understand your needs",
-                "file_name": "File Name",
-                "file_size": "File Size",
-                "quanity": "Quantity needed:",
-                "quatity_liter": "Quantity needed (liters)",
-                "submit": "Submit"
-            },
-            "success_mess": "Created success",
-            "error_mess": "Error! An error occurred. Please try again later",
-            "warning_mess": "You need enter the important information"
-        },
-        "volunteer-page": {
-            "title": "Requests List",
-            "des": "Join rescue efforts and fulfill assistance requests",
-            "card": {
-                "title": "Request",
-                "name": "Name",
-                "phone": "Phone Number",
-                "status": "Status",
-                "location": "Location",
-                "people": "People Affected",
-                "createdAt": "Date Requested",
-                "completed": "Completed",
-                "in-progress-l": "In Progress",
-                "in-progress-u": "IN PROGRESS",
-                "done": "DONE",
-                "pending-u": "PENDING",
-                "pending-l": "Pending",
-                "claim-btn": "Claim",
-                "done-btn": "Done",
-                "assign-btn": "Assign",
-                "reset-btn": "Reset",
-                "find": "Find requests",
-                "filter-title": "Filter status",
-                "status-filter": {
-                    "any": "Any Status",
-                    "pending": "PENDING",
-                    "in-progress": "IN PROGRESS",
-                    "done": "DONE"
-                },
-                "page-size": "Page size",
-                "visible-content": "Select visible content",
-                "visible-desc": "Main distribution properties",
-                "pre": "Preferences",
-                "create_request": "Create Request",
-                "no_req": "No request found",
-                "req": "requests"
-            },
-            "confirm_title_1": "Confirm Request Claim",
-            "confirm_mess_1": "Are you sure you want to claim this request? You will be responsible for fulfilling it.",
-            "confirm_title_2": "Confirm Completion",
-            "confirm_mess_2": "Are you sure you want to mark this request as complete? This action cannot be undone.",
-            "confirm_title_3": "Reset Request Status",
-            "confirm_mess_3": "Are you sure you want to change this request status back to PENDING? This will make it available for volunteers to claim again.",
-            "fail_mess": "Failed to claim request. Please try again."
-        },
-        "detail-request-page": {
-            "title": "Request",
-            "card": {
-                "title_infor": "Request Information",
-                "completed": "COMPLETED",
-                "mark_completed": "Mark as Complete",
-                "name": "Name",
-                "phone": "Phone Number",
-                "address": "Address",
-                "people": "People Affected",
-                "title_status": "Request Status",
-                "status": "Status",
-                "in_progress": "IN_PROGRESS",
-                "done": "DONE",
-                "pending": "PENDING",
-                "createdAt": "Date Requested",
-                "assign_to": "Assigned To",
-                "title_supply": "Requested Supplies",
-                "supply": "Medical Supplies",
-                "unit": "units",
-                "bag": "Sleeping Bags",
-                "water": "Water",
-                "water_unit": "liters",
-                "food": "Food",
-                "food_unit": "meals",
-                "shelter": "Shelter",
-                "shelter_unit": "People",
-                "body_bag": "Body Bags",
-                "location": "Location",
-                "view_map": "View Location on Map",
-                "image": "Image"
-            },
-            "error_reload": "Could not reload request details",
-            "error_login": "You need to be logged in with a valid account to claim this request",
-            "success_claim": "Request marked as completed!",
-            "error_claim": "Failed to claim request. Please try again.",
-            "success_remark": "Request marked as completed!",
-            "error_remark": "Failed to update request status. Please try again.",
-            "success_reset": "Request marked as completed!",
-            "error_reset": "Failed to update request status. Please try again."
-        },
-        "dashboard-page": {
-            "title": "Dashboard",
-            "des": "Visualize requests and resource allocation",
-            "data-text": "Data range:",
-            "to": "to",
-            "apply": "Apply",
-            "export-data": "Export Data",
-            "card": {
-                "active-req": "Active Requests",
-                "vol": "Volunteers",
-                "fulfilled": "Fulfilled Requests",
-                "affected": "Affected Areas",
-                "no-data": "No change from previous week"
-            },
-            "chart": {
-                "title": "Request Types",
-                "time": {
-                    "time-1": "7 Days",
-                    "time-2": "30 Days",
-                    "time-3": "All Time"
-                },
-                "loading_chart": "Loading chart data...."
-            },
-            "supply": "Medical",
-            "water": "Water",
-            "food": "Food",
-            "shelter": "Shelter",
-            "other": "Other",
-            "status_chart": "Request Status",
-            "in-progress": "In Progress",
-            "done": "Done",
-            "pending": "Pending",
-            "all_type": "All Types",
-            "all_req": "All Requests",
-            "all_status": "All Status",
-            "recent_requests": "Recent Requests",
-            "loading_req": "Loading request data...",
-            "loading_map": "Loading map data...",
-            "map_view": "Map View (1160 x 400)",
-            "req_type": "Request Types",
-            "req_location": "Request Locations",
-            "id": "ID",
-            "date": "Date",
-            "actions": "Actions",
-            "view": "View",
-            "show": "Show",
-            "of": "of",
-            "req-l": "requests",
-            "from_per_week": "from previous week"
-        },
-        "management_page": {
-            "title": "Management",
-            "des": "Manage volunteers",
-            "verify": "Verify",
-            "confirm_verify_title": "Confirm Verify Volunteer",
-            "confirm_verify_content": "Are you sure you want to verify this volunteer?",
-            "find_volunteer": "Find volunteers",
-            "username": "Username",
-            "email": "Email",
-            "phone": "Phone Number",
-            "success_verify": "Volunteer verified successfully! You can see them in Verified Tab",
-            "error_verify": "Failed to verify volunteer. Please try again.",
-            "no_volunteer": "No unverified volunteer",
-            "no_display": " No volunteer to display.",
-            "volunteers": "volunteers",
-            "unverified_tab": "Unverified Volunteers",
-            "verified_tab": "Verified Volunteers"
-        }
+        "loading_chart": "Loading chart data...."
+      },
+      "supply": "Medical",
+      "water": "Water",
+      "food": "Food",
+      "shelter": "Shelter",
+      "other": "Other",
+      "status_chart": "Request Status",
+      "in-progress": "In Progress",
+      "done": "Done",
+      "pending": "Pending",
+      "all_type": "All Types",
+      "all_req": "All Requests",
+      "all_status": "All Status",
+      "recent_requests": "Recent Requests",
+      "loading_req": "Loading request data...",
+      "loading_map": "Loading map data...",
+      "map_view": "Map View (1160 x 400)",
+      "req_type": "Request Types",
+      "req_location": "Request Locations",
+      "id": "ID",
+      "date": "Date",
+      "actions": "Actions",
+      "view": "View",
+      "show": "Show",
+      "of": "of",
+      "req-l": "requests",
+      "from_per_week": "from previous week"
+    },
+    "management_page": {
+      "title": "Management",
+      "des": "Manage volunteers",
+      "verify": "Verify",
+      "confirm_verify_title": "Confirm volunteer verification",
+      "confirm_verify_content": "Are you sure you want to verify this volunteer?",
+      "find_volunteer": "Find volunteers",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "success_verify": "Volunteer verified successfully! You can see them in Verified Tab",
+      "error_verify": "Failed to verify volunteer. Please try again.",
+      "no_volunteer": "No unverified volunteer",
+      "no_display": " No volunteer to display.",
+      "volunteers": "volunteers",
+      "unverified_tab": "Unverified Volunteers",
+      "verified_tab": "Verified Volunteers"
     }
+  }
 }

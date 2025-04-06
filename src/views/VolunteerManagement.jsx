@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
-  useParams,
+  Outlet,
   useNavigate,
   Navigate,
   useLocation,
 } from "react-router-dom";
 import { get, patch } from "aws-amplify/api";
 import { withTranslation } from "react-i18next";
+import { fetchUserAttributes } from "aws-amplify/auth";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import {
   Container,
@@ -50,6 +51,7 @@ function VolunteerManagement(props) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [volunteers, setVolunteers] = useState([]);
+  const [user, setUser] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [activeTabId, setActiveTabId] = useState("unverified");
@@ -96,6 +98,25 @@ function VolunteerManagement(props) {
     sorting: {},
     selection: {},
   });
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await fetchUserAttributes();
+        if (user["custom:role"] !== "admin") { 
+          navigate("/");
+        }
+        setUser(user);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        // Handle error (e.g., redirect to login)
+        navigate("/auth");
+        // setLogin(false);
+      } 
+    };
+    fetchUser();
+  }, []);
+
 
   useEffect(() => {
     const loadData = async (type) => {
@@ -152,10 +173,9 @@ function VolunteerManagement(props) {
       await restOperation.response;
 
       // Update the UI
-      const updatedVolunteers = volunteers.map((v) => {
+      const updatedVolunteers = volunteers.filter((v) => {
         return v.id != volunteer.id;
       });
-      console.log("updatedVolunteers", updatedVolunteers);
 
       setVolunteers(updatedVolunteers);
 
@@ -181,7 +201,8 @@ function VolunteerManagement(props) {
 
   return (
     <SpaceBetween size="l">
-      <NavBar />
+      {/* <NavBar user={user}/> */}
+      <Outlet />
       <div className="dashboard-container">
         <BreadcrumbGroup
           items={[
@@ -239,7 +260,7 @@ function VolunteerManagement(props) {
                       columnDefinitions={[
                         {
                           id: "username",
-                          header: t("management_page.username"),
+                          header: t("management_page.name"),
                           cell: (e) => e.name,
                           sortingField: "name",
                           isRowHeader: true,
@@ -312,12 +333,12 @@ function VolunteerManagement(props) {
                       pagination={<Pagination {...paginationProps} />}
                       preferences={
                         <CollectionPreferences
-                          title="Preferences"
+                          title={t("volunteer-page.card.pre")}
                           preferences={preferences}
-                          confirmLabel="Confirm"
-                          cancelLabel="Cancel"
+                          confirmLabel={t("common.confirm")}
+                          cancelLabel={t("common.cancel")}
                           pageSizePreference={{
-                            title: "Page size",
+                            title: t("volunteer-page.card.page-size"),
                             options: [
                               {
                                 value: 20,
@@ -334,24 +355,24 @@ function VolunteerManagement(props) {
                             ],
                           }}
                           visibleContentPreference={{
-                            title: "Select visible content",
+                            title: t("volunteer-page.card.visible-content"),
                             options: [
                               {
-                                label: "Main distribution properties",
+                                label: t("volunteer-page.card.visible-desc"),
                                 options: [
                                   {
                                     id: "name",
-                                    label: "User Name",
+                                    label: t("management_page.name"),
                                     editable: false,
                                   },
                                   {
                                     id: "phone",
-                                    label: "Phone Number",
+                                    label: t("management_page.phone"),
                                     editable: false,
                                   },
                                   {
                                     id: "email",
-                                    label: "Email",
+                                    label: t("management_page.email"),
                                     editable: false,
                                   },
                                 ],
