@@ -1,6 +1,6 @@
 import express from 'express';
 import { dynamoService } from '../services/dynamodb.service.mjs';
-import { mapRequestToDynamoSchema, mapDynamoToFrontendSchema } from '../utils/requestMapper.mjs';
+import { mapRequestToDynamoSchema, mapDynamoToFrontendSchema, validateUpdateData } from '../utils/requestMapper.mjs';
 import { historyService } from '../services/history.service.mjs';
 import statsService from '../services/stats.service.mjs';
 import { CognitoIdentityProvider, AdminGetUserCommand } from '@aws-sdk/client-cognito-identity-provider';
@@ -207,7 +207,6 @@ router.post('/', async (req, res) => {
 
     // Map frontend data to DynamoDB schema
     const dynamoItem = mapRequestToDynamoSchema(req.body);
-    console.log('Putting item:', JSON.stringify(dynamoItem));
 
     // Check if a request with the same phone number and address already exists
     const requestExists = await dynamoService.checkRequestExists(
@@ -246,7 +245,44 @@ router.patch('/:id', async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
 
-    // Verify environment variables
+    // Step 1: Extract user identity from Cognito Identity Pool ID
+    const authProvider = req.apiGateway?.event?.requestContext?.identity?.cognitoAuthenticationProvider;
+    if (!authProvider) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required'
+      });
+    }
+
+    const parts = authProvider.split(':');
+    const userId = parts[parts.length - 1];
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'User identity not found'
+      });
+    }
+
+    // Step 2: Get current request to check status and permissions
+    const dbItem = await dynamoService.getItemById(id);
+    if (!dbItem) {
+      return res.status(404).json({
+        success: false,
+        message: 'Request not found'
+      });
+    }
+
+    // Convert DB format to frontend format for consistent field access
+    const currentItem = mapDynamoToFrontendSchema(dbItem);
+
+    console.log(`Request update attempt - User: ${userId}, Request: ${id}`, {
+      currentStatus: currentItem.status,
+      assignedUser: currentItem.assignedUser || 'none',
+      requestUpdate: updateData
+    });
+
+    // Step 3: Check user role (admin or volunteer)
     const userPoolId = process.env.USER_POOL_ID;
     if (!userPoolId) {
       return res.status(500).json({
@@ -255,126 +291,155 @@ router.patch('/:id', async (req, res) => {
       });
     }
 
-    // Extract user identity from Cognito Identity Pool ID
-    const authProvider = req.apiGateway?.event?.requestContext?.identity?.cognitoAuthenticationProvider;
-
-    let userId;
-    if (authProvider) {
-      const parts = authProvider.split(':');
-      userId = parts[parts.length - 1];
-    }
-
-    if (!userId) {
-      console.error('Missing identity information in request context:',
-        JSON.stringify(req.apiGateway?.event?.requestContext?.identity || {}, null, 2));
-      return res.status(401).json({
-        success: false,
-        message: 'User identity not found in request'
-      });
-    }
-
-    // Get the current request to validate update permissions
-    const currentItem = await dynamoService.getItemById(id);
-    if (!currentItem) {
-      return res.status(404).json({ success: false, message: 'Request not found' });
-    }
-
-    // Check user role by querying Cognito
     let isAdmin = false;
-    let isAuthorizedVolunteer = false;
-    // New flag for initial claim attempt
-    let isInitialClaimAttempt = false;
-
     try {
-      const params = {
-        UserPoolId: userPoolId,
-        Username: userId
-      };
-
-      const command = new AdminGetUserCommand(params);
       const cognito = new CognitoIdentityProvider({
         region: process.env.REGION || 'us-east-1'
       });
-      const response = await cognito.send(command);
 
-      // Check for admin role in user attributes
+      const command = new AdminGetUserCommand({
+        UserPoolId: userPoolId,
+        Username: userId
+      });
+
+      const response = await cognito.send(command);
       const customRoleAttr = response.UserAttributes.find(
         attr => attr.Name === 'custom:role'
       );
 
       isAdmin = customRoleAttr && customRoleAttr.Value === 'admin';
+    } catch (error) {
+      console.error('Error checking user role:', error);
+      return res.status(401).json({
+        success: false,
+        message: 'Could not verify user role'
+      });
+    }
 
-      // If not admin, check if user is the assigned volunteer
-      if (!isAdmin) {
-        isAuthorizedVolunteer = currentItem.assignedUser === userId;
+    // Step 4: Apply permission rules based on request status
+    let isAuthorized = false;
+    let updateReason = '';
 
-        // Check if this is an initial claim attempt by a volunteer
-        isInitialClaimAttempt = (
-          // Request must be in PENDING status
-          currentItem.status === 'PENDING' &&
-          // Request must not have an assigned user
-          !currentItem.assignedUser &&
-          // Update must include status change to IN_PROGRESS
-          updateData.status === 'IN_PROGRESS' &&
-          // Update must set assignedUser to the current user
-          updateData.assignedUser === userId
-        );
-
-        // Check for restricted operations for volunteers
-        if (isAuthorizedVolunteer) {
-          // 1. Volunteer cannot change status from DONE to PENDING
-          if (currentItem.status === 'DONE' && updateData.status === 'PENDING') {
+    switch (currentItem.status) {
+      case 'PENDING':
+        if (isAdmin) {
+          // Admins can assign to any volunteer and update status
+          isAuthorized = true;
+          updateReason = 'admin_update_pending';
+        } else {
+          // Volunteers can only claim for themselves
+          if (updateData.status === 'IN_PROGRESS' &&
+            updateData.assignedUser === userId &&
+            !currentItem.assignedUser) {
+            isAuthorized = true;
+            updateReason = 'volunteer_initial_claim';
+          } else {
             return res.status(403).json({
               success: false,
-              message: 'Volunteers cannot change status from DONE to PENDING'
+              message: 'Volunteers can only claim unassigned PENDING requests for themselves'
             });
           }
+        }
+        break;
 
-          // 2. Volunteer cannot reassign to another volunteer
+      case 'IN_PROGRESS':
+        if (isAdmin) {
+          // Admins can assign to any volunteer and update status
+          isAuthorized = true;
+          updateReason = 'admin_update_in_progress';
+        } else if (currentItem.assignedUser === userId) {
+          // Volunteers can only update their own requests
           if (updateData.assignedUser && updateData.assignedUser !== userId) {
             return res.status(403).json({
               success: false,
               message: 'Volunteers cannot reassign requests to other volunteers'
             });
           }
-        }
-      }
 
-      // If not admin, not authorized volunteer, and not an initial claim attempt, deny access
-      if (!isAdmin && !isAuthorizedVolunteer && !isInitialClaimAttempt) {
-        return res.status(403).json({
-          success: false,
-          message: 'Access denied. You are not authorized to update this request.'
-        });
-      }
-    } catch (error) {
-      console.error('Error verifying user status:', error);
-      return res.status(401).json({
+          // Check if volunteer is trying to mark as DONE
+          if (updateData.status === 'DONE') {
+            isAuthorized = true;
+            updateReason = 'volunteer_completion';
+            // Add completion metadata (using frontend field names)
+            updateData.completedAt = new Date().toISOString();
+            updateData.completedBy = userId;
+          } else {
+            isAuthorized = true;
+            updateReason = 'volunteer_update_own';
+          }
+        } else {
+          return res.status(403).json({
+            success: false,
+            message: 'You can only update requests assigned to you'
+          });
+        }
+        break;
+
+      case 'DONE':
+        if (isAdmin) {
+          // Only admins can update DONE requests
+          isAuthorized = true;
+          updateReason = 'admin_update_done';
+        } else {
+          return res.status(403).json({
+            success: false,
+            message: 'Only admins can update completed requests'
+          });
+        }
+        break;
+
+      default:
+        // Unknown status, only allow admin updates
+        if (isAdmin) {
+          isAuthorized = true;
+          updateReason = 'admin_update_unknown';
+        } else {
+          return res.status(403).json({
+            success: false,
+            message: 'Cannot update request with unknown status'
+          });
+        }
+    }
+
+    // Step 5: Perform the update if authorized
+    if (!isAuthorized) {
+      return res.status(403).json({
         success: false,
-        message: 'Could not verify user status'
+        message: 'You are not authorized to perform this update'
       });
     }
 
-    // Update the item in DynamoDB
-    const updatedItem = await dynamoService.updateItem(id, updateData);
+    // Add update metadata (using frontend field names)
+    updateData.updatedAt = new Date().toISOString();
+    updateData.updatedBy = userId;
 
-    // Map the response to frontend schema
-    const updatedRequest = mapDynamoToFrontendSchema(updatedItem);
+    // Use the validateUpdateData function to convert to proper DynamoDB format
+    // This will handle field name conversion (camelCase to snake_case)
+    const dbUpdateData = validateUpdateData(updateData);
 
-    // Return success response with user role info for audit purposes
+    // Perform the update with the properly formatted data
+    const updatedDbItem = await dynamoService.updateItem(id, dbUpdateData);
+
+    // Map the response back to frontend format for the API response
+    const mappedItem = mapDynamoToFrontendSchema(updatedDbItem);
+
+    // Step 6: Return success response with audit info
     return res.json({
       success: true,
-      data: updatedRequest,
-      userInfo: {
-        userId: userId,
-        isAdmin: isAdmin,
-        isAssignedVolunteer: isAuthorizedVolunteer,
-        isInitialClaim: isInitialClaimAttempt
+      data: mappedItem,
+      audit: {
+        userId,
+        isAdmin,
+        updateReason,
+        timestamp: updateData.updatedAt
       }
     });
   } catch (err) {
     console.error('Error updating request:', err);
-    return res.status(500).json({ success: false, message: err.message });
+    return res.status(500).json({
+      success: false,
+      message: err.message || 'Could not update request'
+    });
   }
 });
 

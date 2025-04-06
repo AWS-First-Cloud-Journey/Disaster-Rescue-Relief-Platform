@@ -20,7 +20,7 @@
       "function": {
         "emergencyInfor": {
           "deploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
-          "s3Key": "amplify-builds/emergencyInfor-4633394e523577694d7a-build.zip"
+          "s3Key": "amplify-builds/emergencyInfor-4652422b5931634f7158-build.zip"
         },
         "volunteers": {
           "deploymentBucketName": "amplify-emergencyresponseapp-stg-b41b5-deployment",
