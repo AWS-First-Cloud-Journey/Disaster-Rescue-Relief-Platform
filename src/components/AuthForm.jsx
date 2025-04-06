@@ -140,7 +140,7 @@ function AuthForm(props) {
 
                 {/* Append & require Terms & Conditions field to sign up  */}
                 <SelectField label={t("auth.role.label")} name="custom:role">
-                  <option value={t("auth.role.volunteer")}>{t("auth.role.volunteer")}</option>
+                  <option value={'Volunteer'}>{t("auth.role.volunteer")}</option>
                   {/* <option value="saler">Saler</option> */}
                 </SelectField>
               </>
