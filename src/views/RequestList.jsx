@@ -16,7 +16,9 @@ import {
   CollectionPreferences,
   Modal,
   Link,
-  BreadcrumbGroup
+  BreadcrumbGroup,
+  TextFilter,
+  Table,
 } from "@cloudscape-design/components";
 import moment from "moment";
 import { useCollection } from "@cloudscape-design/collection-hooks";
@@ -24,6 +26,7 @@ import NavBar from "../components/NavBar";
 
 const apiName = "fcjemergency";
 const path = "/requesters";
+const verifyPath = "/volunteers/verified";
 const SEARCHABLE_COLUMNS = ["name", "status", "id", "phoneNumber"];
 
 export function transformDateTime(createAt) {
@@ -66,28 +69,192 @@ function prepareSelectOptions(field, defaultOption) {
   return options;
 }
 
+function VolunteerTable(props) {
+  const t = props.t;
+  const [loading, setLoading] = useState(false);
+  const [preferences, setPreferences] = useState({
+    pageSize: 10,
+    visibleContent: ["name", "phoneNumber", "email"],
+  });
+  const {
+    items,
+    actions,
+    filteredItemsCount,
+    collectionProps,
+    filterProps,
+    paginationProps,
+  } = useCollection(props.volunteers, {
+    filtering: {
+      empty: <EmptyState title="No volunteers" />,
+      noMatch: (
+        <EmptyState
+          title={t("common.no_matches")}
+          action={
+            <Button onClick={() => actions.setFiltering("")}>
+              {t("common.clear_filter")}
+            </Button>
+          }
+        />
+      ),
+    },
+    pagination: { pageSize: preferences.pageSize },
+    sorting: {},
+    selection: {},
+  });
+  return (
+    <Table
+      {...collectionProps}
+      onSelectionChange={({ detail }) =>
+        props.setSelectedItems(detail.selectedItems)
+      }
+      selectedItems={props.selectedItems}
+      ariaLabels={{
+        selectionGroupLabel: "Items selection",
+        allItemsSelectionLabel: ({ selectedItems }) =>
+          `${selectedItems.length} ${
+            selectedItems.length === 1 ? "item" : "items"
+          } selected`,
+        itemSelectionLabel: ({ selectedItems }, item) => {
+          const isItemSelected = selectedItems.filter(
+            (i) => i.Name === item.Name
+          ).length;
+          return `${item.Name} is ${isItemSelected ? "" : "not"} selected`;
+        },
+      }}
+      columnDefinitions={[
+        {
+          id: "username",
+          header: t("management_page.name"),
+          cell: (e) => e.name,
+          sortingField: "name",
+          isRowHeader: true,
+        },
+        {
+          id: "phone",
+          header: t("management_page.phone"),
+          cell: (e) => e.phone_number,
+        },
+        {
+          id: "email",
+          header: t("management_page.email"),
+          cell: (e) => e.email,
+        },
+      ]}
+      columnVisibility={preferences.visibleContent}
+      items={items}
+      loadingText={t("common.loading_text")}
+      loading={loading}
+      selectionType="single"
+      trackBy="email"
+      empty={
+        <Box textAlign="center" color="inherit">
+          <b>{t("management_page.no_volunteer")}</b>
+          <Box padding={{ bottom: "s" }} variant="p" color="inherit">
+            {t("management_page.no_display")}
+          </Box>
+        </Box>
+      }
+      filter={
+        <div className="input-container">
+          <TextFilter
+            {...filterProps}
+            filteringPlaceholder={t("management_page.find_volunteer")}
+          />
+        </div>
+      }
+      header={
+        <Header
+          counter={
+            props.selectedItems.length
+              ? "(" + props.selectedItems.length + `/${props.volunteers.length})`
+              : `(${props.volunteers.length})`
+          }
+        >
+          Verified Volunteers
+        </Header>
+      }
+      pagination={<Pagination {...paginationProps} />}
+      preferences={
+        <CollectionPreferences
+          title={t("volunteer-page.card.pre")}
+          preferences={preferences}
+          confirmLabel={t("common.confirm")}
+          cancelLabel={t("common.cancel")}
+          pageSizePreference={{
+            title: t("volunteer-page.card.page-size"),
+            options: [
+              {
+                value: 20,
+                label: "20 " + t("management_page.volunteers"),
+              },
+              {
+                value: 40,
+                label: "40 " + t("management_page.volunteers"),
+              },
+              {
+                value: 60,
+                label: "60 " + t("management_page.volunteers"),
+              },
+            ],
+          }}
+          visibleContentPreference={{
+            title: t("volunteer-page.card.visible-content"),
+            options: [
+              {
+                label: t("volunteer-page.card.visible-desc"),
+                options: [
+                  {
+                    id: "name",
+                    label: t("management_page.name"),
+                    editable: false,
+                  },
+                  {
+                    id: "phone",
+                    label: t("management_page.phone"),
+                    editable: false,
+                  },
+                  {
+                    id: "email",
+                    label: t("management_page.email"),
+                    editable: false,
+                  },
+                ],
+              },
+            ],
+          }}
+          onConfirm={({ detail }) => setPreferences(detail)}
+        />
+      }
+    />
+  );
+}
+
 function RequestList(props) {
   const navigate = useNavigate();
-  const {t} = props;
+  const { t } = props;
   const [defaultStatus] = useState({ value: "0", label: "Any Status" });
   const [loading, setLoading] = useState(true);
   const [requests, setRequests] = useState([]);
+  const [verifiedVolunteers, setVerifiedVolunteers] = useState([]);
+  const [currentData, setCurrentData] = useState([]);
   const [status, setStatus] = useState(defaultStatus);
   const [user, setUser] = useState(null);
   const [login, setLogin] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [preferences, setPreferences] = useState({
     pageSize: 10,
-    visibleContent: [
-      "name",
-      "phoneNumber",
-      "status",
-    ],
+    visibleContent: ["name", "phoneNumber", "status"],
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "",
     content: "",
-    onConfirm: () => { },
+    onConfirm: () => {},
+  });
+  const [modalVolunteerVisible, setModalVolunteerVisible] = useState(false);
+  const [modalVolunteerConfig, setModalVolunteerConfig] = useState({
+    title: "",
+    onConfirm: () => {},
   });
   const selectRequestOptions = prepareSelectOptions("status", defaultStatus);
 
@@ -101,7 +268,9 @@ function RequestList(props) {
   const showConfirmClaimModal = (id) => {
     // Check if user is properly authenticated first
     if (!user || !user.sub) {
-      alert('You need to be logged in with a valid account to claim this request');
+      alert(
+        "You need to be logged in with a valid account to claim this request"
+      );
       return;
     }
 
@@ -117,8 +286,10 @@ function RequestList(props) {
     try {
       // Check if user and user.sub exist
       if (!user || !user.sub) {
-        console.error('Cannot claim request: User ID not found');
-        alert('You need to be logged in with a valid account to claim this request');
+        console.error("Cannot claim request: User ID not found");
+        alert(
+          "You need to be logged in with a valid account to claim this request"
+        );
         setModalVisible(false);
         return;
       }
@@ -129,16 +300,16 @@ function RequestList(props) {
         path: `/requesters/${id}`,
         options: {
           body: {
-            status: 'IN_PROGRESS',
-            assignedUser: user.sub
-          }
-        }
+            status: "IN_PROGRESS",
+            assignedUser: user.sub,
+          },
+        },
       });
 
       await restOperation.response;
       await getAllRequests();
     } catch (error) {
-      console.error('Error claiming request:', error);
+      console.error("Error claiming request:", error);
       alert(t("volunteer-page.fail_mess"));
     } finally {
       setModalVisible(false);
@@ -161,15 +332,15 @@ function RequestList(props) {
         path: `/requesters/${id}`,
         options: {
           body: {
-            status: 'DONE'
-          }
-        }
+            status: "DONE",
+          },
+        },
       });
 
       await restOperation.response;
       await getAllRequests();
     } catch (error) {
-      console.error('Error marking request as done:', error);
+      console.error("Error marking request as done:", error);
     } finally {
       setModalVisible(false);
     }
@@ -191,16 +362,16 @@ function RequestList(props) {
         path: `/requesters/${id}`,
         options: {
           body: {
-            status: 'PENDING',
-            assignedUser: null  // Clear the assigned user when resetting
-          }
-        }
+            status: "PENDING",
+            assignedUser: null, // Clear the assigned user when resetting
+          },
+        },
       });
 
       await restOperation.response;
       await getAllRequests();
     } catch (error) {
-      console.error('Error resetting request status:', error);
+      console.error("Error resetting request status:", error);
     } finally {
       setModalVisible(false);
     }
@@ -208,8 +379,48 @@ function RequestList(props) {
 
   const handleAssignRequest = (id) => {
     // For admins - perhaps open a dialog to select a user to assign
-    console.log('Admin assigning request', id);
+    console.log("Admin assigning request", id);
     // Implement assignment logic here
+    setModalVolunteerVisible(true);
+    setCurrentData(verifiedVolunteers);
+    setModalVolunteerConfig({
+      title: t("volunteer-page.confirm_title_4"),
+      onConfirm: () => performAssignRequest(id),
+    });
+  };
+
+  const performAssignRequest = async (id) => {
+    try {
+      // Check if user and user.sub exist
+      if (!user || !user.sub) {
+        console.error("Cannot claim request: User ID not found");
+        alert(
+          "You need to be logged in with a valid account to claim this request"
+        );
+        setModalVolunteerVisible(false);
+        return;
+      }
+
+      // The actual API call
+      const restOperation = patch({
+        apiName: apiName,
+        path: `/requesters/${id}`,
+        options: {
+          body: {
+            status: "IN_PROGRESS",
+            assignedUser: selectedItems[0].id,
+          },
+        },
+      });
+
+      await restOperation.response;
+      await getAllRequests();
+    } catch (error) {
+      console.error("Error claiming request:", error);
+      alert(t("volunteer-page.fail_mess"));
+    } finally {
+      setModalVolunteerVisible(false);
+    }
   };
 
   const {
@@ -219,17 +430,13 @@ function RequestList(props) {
     collectionProps,
     filterProps,
     paginationProps,
-  } = useCollection(requests, {
+  } = useCollection(currentData, {
     filtering: {
-      empty: <EmptyState title="No requests" />,
+      empty: <EmptyState title="No data" />,
       noMatch: (
         <EmptyState
           title="No matches"
-          action={
-            <Button onClick={() => clearFilter()}>
-              Clear filter
-            </Button>
-          }
+          action={<Button onClick={() => clearFilter()}>Clear filter</Button>}
         />
       ),
       filteringFunction: (item, filteringText) => {
@@ -259,6 +466,7 @@ function RequestList(props) {
     getUser().then((user) => {
       if (user) {
         getAllRequests();
+        getVerifiedVolunteer();
       } else {
         setLoading(false);
       }
@@ -270,7 +478,6 @@ function RequestList(props) {
       // const user = await getCurrentUser();
       const user = await fetchUserAttributes();
       setUser(user);
-      setLogin(true);
       return user;
     } catch (error) {
       setLogin(false);
@@ -288,6 +495,23 @@ function RequestList(props) {
       const response = await restOperation.response;
       const json = await response.body.json();
       setRequests(json.data);
+      setCurrentData(json.data);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const getVerifiedVolunteer = async () => {
+    try {
+      // const response = await API.put(apiName, path, {body: data});
+      const restOperation = get({
+        apiName: apiName,
+        path: verifyPath,
+      });
+      const response = await restOperation.response;
+      const json = await response.body.json();
+      setVerifiedVolunteers(json.verifiedVolunteers);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -313,13 +537,13 @@ function RequestList(props) {
               <BreadcrumbGroup
                 items={[
                   { text: t("home.home"), href: "/" },
-                  { text: t("volunteer-page.title"), href: "#" }
+                  { text: t("volunteer-page.title"), href: "#" },
                 ]}
                 ariaLabel="Breadcrumbs"
               />
               <Header variant="h1" description={t("volunteer-page.des")}>
-                  {t("volunteer-page.title")}
-                </Header>
+                {t("volunteer-page.title")}
+              </Header>
             </SpaceBetween>
             <Cards
               {...collectionProps}
@@ -332,37 +556,66 @@ function RequestList(props) {
                   // Determine which button to display based on user role and request status
                   let actionButton;
 
-                  if (item.status === 'DONE') {
+                  if (item.status === "DONE") {
                     // For completed requests, only admins can reset status
-                    if (user && user['custom:role'] === 'admin') {
-                      actionButton = <Button onClick={(e) => {
-                        e.stopPropagation(); // Prevent navigation
-                        showConfirmResetStatusModal(item.id);
-                      }}>{t("volunteer-page.card.reset-btn")}</Button>;
+                    if (user && user["custom:role"] === "admin") {
+                      actionButton = (
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent navigation
+                            showConfirmResetStatusModal(item.id);
+                          }}
+                        >
+                          {t("volunteer-page.card.reset-btn")}
+                        </Button>
+                      );
                     } else {
                       actionButton = null; // No actions for completed requests for non-admins
                     }
-                  } else if (user && user['custom:role'] !== 'admin') {
+                  } else if (user && user["custom:role"] !== "admin") {
                     // For non-admin users with active requests
                     if (user.sub === item.assignedUser) {
                       // User is assigned to this request - show Done button
-                      actionButton = <Button variant="primary" onClick={(e) => {
-                        e.stopPropagation(); // Prevent navigation
-                        showConfirmMarkDoneModal(item.id);
-                      }}>{t("volunteer-page.card.done-btn")}</Button>;
-                    } else if (item.status === 'PENDING') {
+                      actionButton = (
+                        <Button
+                          variant="primary"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent navigation
+                            showConfirmMarkDoneModal(item.id);
+                          }}
+                        >
+                          {t("volunteer-page.card.done-btn")}
+                        </Button>
+                      );
+                    } else if (item.status === "PENDING") {
                       // Unassigned request with PENDING status - show Claim button
-                      actionButton = <Button onClick={(e) => {
-                        e.stopPropagation(); // Prevent navigation
-                        showConfirmClaimModal(item.id);
-                      }}>{t("volunteer-page.card.claim-btn")}</Button>;
+                      actionButton = (
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent navigation
+                            showConfirmClaimModal(item.id);
+                          }}
+                        >
+                          {t("volunteer-page.card.claim-btn")}
+                        </Button>
+                      );
                     }
-                  } else if (user && user['custom:role'] === 'admin' && item.status !== 'DONE') {
+                  } else if (
+                    user &&
+                    user["custom:role"] === "admin" &&
+                    item.status !== "DONE"
+                  ) {
                     // For admin users - show assign button for active requests
-                    actionButton = <Button onClick={(e) => {
-                      e.stopPropagation(); // Prevent navigation
-                      handleAssignRequest(item.id);
-                    }}>{t("volunteer-page.card.assign-btn")}</Button>;
+                    actionButton = (
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent navigation
+                          handleAssignRequest(item.id);
+                        }}
+                      >
+                        {t("volunteer-page.card.assign-btn")}
+                      </Button>
+                    );
                   }
 
                   return (
@@ -370,18 +623,27 @@ function RequestList(props) {
                       fontSize="heading-m"
                       actions={
                         <SpaceBetween direction="horizontal" size="xs">
-                          {item.status === 'DONE' && (
-                            <span className="status-pill status-done" onClick={(e) => e.stopPropagation()}>
+                          {item.status === "DONE" && (
+                            <span
+                              className="status-pill status-done"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               ✓ {t("volunteer-page.card.completed")}
                             </span>
                           )}
-                          {item.status === 'IN_PROGRESS' && (
-                            <span className="status-pill status-in-progress" onClick={(e) => e.stopPropagation()}>
+                          {item.status === "IN_PROGRESS" && (
+                            <span
+                              className="status-pill status-in-progress"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               ⟳ {t("volunteer-page.card.in-progress-l")}
                             </span>
                           )}
-                          {item.status === 'PENDING' && !actionButton && (
-                            <span className="status-pill status-pending" onClick={(e) => e.stopPropagation()}>
+                          {item.status === "PENDING" && !actionButton && (
+                            <span
+                              className="status-pill status-pending"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               ⏱ {t("volunteer-page.card.pending-l")}
                             </span>
                           )}
@@ -389,7 +651,14 @@ function RequestList(props) {
                         </SpaceBetween>
                       }
                     >
-                      <Link onClick={(e) => navigate(`/requestList/${item.id}`, {state: item})} fontSize="heading-l">{t("volunteer-page.card.title")} #{item.id}</Link>
+                      <Link
+                        onClick={(e) =>
+                          navigate(`/requestList/${item.id}`, { state: item })
+                        }
+                        fontSize="heading-l"
+                      >
+                        {t("volunteer-page.card.title")} #{item.id}
+                      </Link>
                     </Header>
                   );
                 },
@@ -476,10 +745,10 @@ function RequestList(props) {
                   <LiveRegion>
                     {(filterProps.filteringText ||
                       status !== defaultStatus) && (
-                        <span className="filtering-results">
-                          {filteredItemsCount}
-                        </span>
-                      )}
+                      <span className="filtering-results">
+                        {filteredItemsCount}
+                      </span>
+                    )}
                   </LiveRegion>
                 </div>
               }
@@ -493,9 +762,18 @@ function RequestList(props) {
                   pageSizePreference={{
                     title: t("volunteer-page.card.page-size"),
                     options: [
-                      { value: 10, label: "10 " + t("volunteer-page.card.req") },
-                      { value: 30, label: "30 " + t("volunteer-page.card.req") },
-                      { value: 50, label: "50 " + t("volunteer-page.card.req") },
+                      {
+                        value: 10,
+                        label: "10 " + t("volunteer-page.card.req"),
+                      },
+                      {
+                        value: 30,
+                        label: "30 " + t("volunteer-page.card.req"),
+                      },
+                      {
+                        value: 50,
+                        label: "50 " + t("volunteer-page.card.req"),
+                      },
                     ],
                   }}
                   visibleContentPreference={{
@@ -509,9 +787,18 @@ function RequestList(props) {
                             label: t("volunteer-page.card.name"),
                             editable: false,
                           },
-                          { id: "mapLink", label: t("volunteer-page.card.location") },
-                          { id: "status", label: t("volunteer-page.card.status") },
-                          { id: "phoneNumber", label: t("volunteer-page.card.phone") },
+                          {
+                            id: "mapLink",
+                            label: t("volunteer-page.card.location"),
+                          },
+                          {
+                            id: "status",
+                            label: t("volunteer-page.card.status"),
+                          },
+                          {
+                            id: "phoneNumber",
+                            label: t("volunteer-page.card.phone"),
+                          },
                         ],
                       },
                     ],
@@ -527,13 +814,51 @@ function RequestList(props) {
               footer={
                 <Box float="right">
                   <SpaceBetween direction="horizontal" size="xs">
-                    <Button variant="link" onClick={() => setModalVisible(false)}>{t("common.cancel")}</Button>
-                    <Button variant="primary" onClick={modalConfig.onConfirm}>{t("common.confirm")}</Button>
+                    <Button
+                      variant="link"
+                      onClick={() => setModalVisible(false)}
+                    >
+                      {t("common.cancel")}
+                    </Button>
+                    <Button variant="primary" onClick={modalConfig.onConfirm}>
+                      {t("common.confirm")}
+                    </Button>
                   </SpaceBetween>
                 </Box>
               }
             >
               <Box padding="s">{modalConfig.content}</Box>
+            </Modal>
+            <Modal
+              visible={modalVolunteerVisible}
+              onDismiss={() => setModalVolunteerVisible(false)}
+              header={modalVolunteerConfig.title}
+              footer={
+                <Box float="right">
+                  <SpaceBetween direction="horizontal" size="xs">
+                    <Button
+                      variant="link"
+                      onClick={() => setModalVolunteerVisible(false)}
+                    >
+                      {t("common.cancel")}
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={modalVolunteerConfig.onConfirm}
+                    >
+                      {t("common.confirm")}
+                    </Button>
+                  </SpaceBetween>
+                </Box>
+              }
+            >
+              <VolunteerTable
+                volunteers={verifiedVolunteers}
+                t={t}
+                selectedItems={selectedItems}
+                setSelectedItems={(data) => setSelectedItems(data)}
+              >
+              </VolunteerTable>
             </Modal>
           </div>
         </>

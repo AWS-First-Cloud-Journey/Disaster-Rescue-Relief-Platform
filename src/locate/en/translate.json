@@ -169,7 +169,8 @@
       "confirm_mess_2": "Are you sure you want to mark this request as complete? This action cannot be undone.",
       "confirm_title_3": "Reset Request Status",
       "confirm_mess_3": "Are you sure you want to change this request status back to PENDING? This will make it available for volunteers to claim again.",
-      "fail_mess": "Failed to claim request. Please try again."
+      "fail_mess": "Failed to claim request. Please try again.",
+      "confirm_title_4": "Confirm Request Assignment"
     },
     "detail-request-page": {
       "title": "Request",

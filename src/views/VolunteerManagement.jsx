@@ -327,7 +327,7 @@ function VolunteerManagement(props) {
                               : `(${volunteers.length})`
                           }
                         >
-                          Unverified Volunteers
+                          {t("management_page.unverified_tab")}
                         </Header>
                       }
                       pagination={<Pagination {...paginationProps} />}
@@ -480,7 +480,7 @@ function VolunteerManagement(props) {
                               : `(${volunteers.length})`
                           }
                         >
-                          Unverified Volunteers
+                          {t("management_page.verified_tab")}
                         </Header>
                       }
                       pagination={<Pagination {...paginationProps} />}
