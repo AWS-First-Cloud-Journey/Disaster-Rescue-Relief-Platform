@@ -8,7 +8,7 @@ import {
   Icon,
   Button
 } from "@cloudscape-design/components"
-import { put } from 'aws-amplify/api';
+import { put, post } from 'aws-amplify/api';
 import { v4 as uuid } from "uuid"
 import NavBar from "../components/NavBar";
 import { uploadData } from 'aws-amplify/storage';
@@ -125,7 +125,7 @@ function RequestForm(props) {
       };
 
       // Rest of your code remains unchanged
-      const restOperation = put({
+      const restOperation = post({
         apiName: apiName,
         path: path,
         options: {

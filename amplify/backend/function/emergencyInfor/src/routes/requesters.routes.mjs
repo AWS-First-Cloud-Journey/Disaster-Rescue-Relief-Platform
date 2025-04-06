@@ -198,7 +198,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // CREATE requesters information
-router.put('/', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     if (!req.body) {
       return res.status(400).json({ success: false, message: 'Missing request body' });
@@ -239,17 +239,108 @@ router.put('/', async (req, res) => {
   }
 });
 
-// UPDATE requester information
+// UPDATE requester information with role-based permissions
 router.patch('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
 
-    // Get the current request to know its old status
+    // Verify environment variables
+    const userPoolId = process.env.USER_POOL_ID;
+    if (!userPoolId) {
+      return res.status(500).json({
+        success: false,
+        message: 'USER_POOL_ID environment variable not set'
+      });
+    }
+
+    // Extract user identity from Cognito Identity Pool ID
+    const authProvider = req.apiGateway?.event?.requestContext?.identity?.cognitoAuthenticationProvider;
+
+    let userId;
+    if (authProvider) {
+      const parts = authProvider.split(':');
+      userId = parts[parts.length - 1];
+    }
+
+    if (!userId) {
+      console.error('Missing identity information in request context:',
+        JSON.stringify(req.apiGateway?.event?.requestContext?.identity || {}, null, 2));
+      return res.status(401).json({
+        success: false,
+        message: 'User identity not found in request'
+      });
+    }
+
+    // Get the current request to validate update permissions
     const currentItem = await dynamoService.getItemById(id);
     if (!currentItem) {
       return res.status(404).json({ success: false, message: 'Request not found' });
     }
+
+    // Check user role by querying Cognito
+    let isAdmin = false;
+    let isAuthorizedVolunteer = false;
+
+    try {
+      const params = {
+        UserPoolId: userPoolId,
+        Username: userId
+      };
+
+      const command = new AdminGetUserCommand(params);
+      const cognito = new CognitoIdentityProvider({
+        region: process.env.REGION || 'us-east-1'
+      });
+      const response = await cognito.send(command);
+
+      // Check for admin role in user attributes
+      const customRoleAttr = response.UserAttributes.find(
+        attr => attr.Name === 'custom:role'
+      );
+
+      isAdmin = customRoleAttr && customRoleAttr.Value === 'admin';
+
+      // If not admin, check if user is the assigned volunteer
+      if (!isAdmin) {
+        isAuthorizedVolunteer = currentItem.assignedUser === userId;
+
+        // Check for restricted operations for volunteers
+        if (isAuthorizedVolunteer) {
+          // 1. Volunteer cannot change status from DONE to PENDING
+          if (currentItem.status === 'DONE' && updateData.status === 'PENDING') {
+            return res.status(403).json({
+              success: false,
+              message: 'Volunteers cannot change status from DONE to PENDING'
+            });
+          }
+
+          // 2. Volunteer cannot reassign to another volunteer
+          if (updateData.assignedUser && updateData.assignedUser !== userId) {
+            return res.status(403).json({
+              success: false,
+              message: 'Volunteers cannot reassign requests to other volunteers'
+            });
+          }
+        }
+      }
+
+      // If neither admin nor authorized volunteer, deny access
+      if (!isAdmin && !isAuthorizedVolunteer) {
+        return res.status(403).json({
+          success: false,
+          message: 'Access denied. You are not authorized to update this request.'
+        });
+      }
+    } catch (error) {
+      console.error('Error verifying user status:', error);
+      return res.status(401).json({
+        success: false,
+        message: 'Could not verify user status'
+      });
+    }
+
+    // At this point, the user is either an admin or the assigned volunteer with valid update permissions
 
     // Update the item in DynamoDB
     const updatedItem = await dynamoService.updateItem(id, updateData);
@@ -257,47 +348,15 @@ router.patch('/:id', async (req, res) => {
     // Map the response to frontend schema
     const updatedRequest = mapDynamoToFrontendSchema(updatedItem);
 
-    const oldStatus = currentItem.status || 'PENDING';
-    const newStatus = updateData.status || oldStatus;
-
-    // If status has changed, record it in history
-    if (oldStatus !== newStatus) {
-      console.log(`Status changed from ${oldStatus} to ${newStatus} for request ${id}`);
-
-      // Determine action type
-      let actionType;
-      if (oldStatus === 'PENDING' && newStatus === 'IN_PROGRESS') {
-        actionType = 'CLAIM';
-      } else if (newStatus === 'DONE') {
-        actionType = 'COMPLETE';
-      } else if (oldStatus === 'DONE' && newStatus !== 'DONE') {
-        actionType = 'REOPEN';
-      } else {
-        actionType = 'STATUS_CHANGE';
-      }
-
-      // Get user info from the request if available
-      const userId = req.user?.sub || 'system';
-
-      await historyService.recordStatusChange(
-        id,
-        oldStatus,
-        newStatus,
-        userId,
-        actionType,
-        {
-          request_name: currentItem.req_name,
-          request_address: currentItem.req_address,
-          volunteerId: updateData.assignedUser || currentItem.assignedUser, // Store assigned volunteer ID
-          comments: updateData.comments
-        }
-      );
-    }
-
-    // Return response immediately
+    // Return success response with user role info for audit purposes
     return res.json({
       success: true,
-      data: updatedRequest
+      data: updatedRequest,
+      userInfo: {
+        userId: userId,
+        isAdmin: isAdmin,
+        isAssignedVolunteer: isAuthorizedVolunteer
+      }
     });
   } catch (err) {
     console.error('Error updating request:', err);
