@@ -111,8 +111,7 @@ function VolunteerTable(props) {
       ariaLabels={{
         selectionGroupLabel: "Items selection",
         allItemsSelectionLabel: ({ selectedItems }) =>
-          `${selectedItems.length} ${
-            selectedItems.length === 1 ? "item" : "items"
+          `${selectedItems.length} ${selectedItems.length === 1 ? "item" : "items"
           } selected`,
         itemSelectionLabel: ({ selectedItems }, item) => {
           const isItemSelected = selectedItems.filter(
@@ -222,7 +221,11 @@ function VolunteerTable(props) {
               },
             ],
           }}
-          onConfirm={({ detail }) => setPreferences(detail)}
+          onConfirm={({ detail }) => {
+            console.log("Preferences updated:", detail);
+            setPreferences(detail)
+          }
+          }
         />
       }
     />
@@ -249,13 +252,14 @@ function RequestList(props) {
   const [modalConfig, setModalConfig] = useState({
     title: "",
     content: "",
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
   const [modalVolunteerVisible, setModalVolunteerVisible] = useState(false);
   const [modalVolunteerConfig, setModalVolunteerConfig] = useState({
     title: "",
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
+  const [requestToAssign, setRequestToAssign] = useState(null);
   const selectRequestOptions = prepareSelectOptions("status", defaultStatus);
 
   function matchesStatus(item, selectedStatus) {
@@ -378,25 +382,24 @@ function RequestList(props) {
   };
 
   const handleAssignRequest = (id) => {
-    // For admins - perhaps open a dialog to select a user to assign
+    // For admins - store the request ID for later use
     console.log("Admin assigning request", id);
-    // Implement assignment logic here
+    setRequestToAssign(id); // Store the request ID
+    setSelectedItems([]); // Clear any previous selections
     setModalVolunteerVisible(true);
-    setCurrentData(verifiedVolunteers);
-    setModalVolunteerConfig({
-      title: t("volunteer-page.confirm_title_4"),
-      onConfirm: () => performAssignRequest(id),
-    });
   };
 
-  const performAssignRequest = async (id) => {
+  const performAssignRequest = async () => {
     try {
-      // Check if user and user.sub exist
-      if (!user || !user.sub) {
-        console.error("Cannot claim request: User ID not found");
-        alert(
-          "You need to be logged in with a valid account to claim this request"
-        );
+      // Check if we have a volunteer selected
+      if (!selectedItems || selectedItems.length === 0) {
+        alert(t("volunteer-page.please_select_volunteer"));
+        return;
+      }
+
+      // Check if we have a request ID
+      if (!requestToAssign) {
+        console.error("Cannot assign request: Request ID not found");
         setModalVolunteerVisible(false);
         return;
       }
@@ -404,7 +407,7 @@ function RequestList(props) {
       // The actual API call
       const restOperation = patch({
         apiName: apiName,
-        path: `/requesters/${id}`,
+        path: `/requesters/${requestToAssign}`,
         options: {
           body: {
             status: "IN_PROGRESS",
@@ -415,11 +418,10 @@ function RequestList(props) {
 
       await restOperation.response;
       await getAllRequests();
-    } catch (error) {
-      console.error("Error claiming request:", error);
-      alert(t("volunteer-page.fail_mess"));
-    } finally {
       setModalVolunteerVisible(false);
+    } catch (error) {
+      console.error("Error assigning request:", error);
+      alert(t("volunteer-page.fail_mess"));
     }
   };
 
@@ -745,10 +747,10 @@ function RequestList(props) {
                   <LiveRegion>
                     {(filterProps.filteringText ||
                       status !== defaultStatus) && (
-                      <span className="filtering-results">
-                        {filteredItemsCount}
-                      </span>
-                    )}
+                        <span className="filtering-results">
+                          {filteredItemsCount}
+                        </span>
+                      )}
                   </LiveRegion>
                 </div>
               }
@@ -832,7 +834,7 @@ function RequestList(props) {
             <Modal
               visible={modalVolunteerVisible}
               onDismiss={() => setModalVolunteerVisible(false)}
-              header={modalVolunteerConfig.title}
+              header={t("volunteer-page.assign_volunteer")}
               footer={
                 <Box float="right">
                   <SpaceBetween direction="horizontal" size="xs">
@@ -844,7 +846,8 @@ function RequestList(props) {
                     </Button>
                     <Button
                       variant="primary"
-                      onClick={modalVolunteerConfig.onConfirm}
+                      onClick={performAssignRequest}
+                      disabled={!selectedItems || selectedItems.length === 0}
                     >
                       {t("common.confirm")}
                     </Button>
@@ -857,8 +860,7 @@ function RequestList(props) {
                 t={t}
                 selectedItems={selectedItems}
                 setSelectedItems={(data) => setSelectedItems(data)}
-              >
-              </VolunteerTable>
+              />
             </Modal>
           </div>
         </>

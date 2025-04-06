@@ -1,13 +1,6 @@
 {
   "version": 1,
   "paths": {
-    "/requesters": {
-      "name": "/requesters",
-      "lambdaFunction": "emergencyInfor",
-      "permissions": {
-        "setting": "open"
-      }
-    },
     "/volunteers": {
       "name": "/volunteers",
       "lambdaFunction": "volunteers",
@@ -18,6 +11,22 @@
           "read",
           "update",
           "delete"
+        ]
+      }
+    },
+    "/requesters": {
+      "name": "/requesters",
+      "lambdaFunction": "emergencyInfor",
+      "permissions": {
+        "setting": "protected",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ],
+        "guest": [
+          "create"
         ]
       }
     }

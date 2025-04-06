@@ -8,7 +8,7 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "emergencyInfor"
+          "resourceName": "volunteers"
         },
         {
           "attributes": [
@@ -16,7 +16,7 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "volunteers"
+          "resourceName": "emergencyInfor"
         }
       ],
       "providerPlugin": "awscloudformation",

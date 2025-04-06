@@ -3,6 +3,7 @@ import { dynamoService } from '../services/dynamodb.service.mjs';
 import { mapRequestToDynamoSchema, mapDynamoToFrontendSchema } from '../utils/requestMapper.mjs';
 import { historyService } from '../services/history.service.mjs';
 import statsService from '../services/stats.service.mjs';
+import { CognitoIdentityProvider, AdminGetUserCommand } from '@aws-sdk/client-cognito-identity-provider';
 
 const router = express.Router();
 
@@ -281,6 +282,8 @@ router.patch('/:id', async (req, res) => {
     // Check user role by querying Cognito
     let isAdmin = false;
     let isAuthorizedVolunteer = false;
+    // New flag for initial claim attempt
+    let isInitialClaimAttempt = false;
 
     try {
       const params = {
@@ -305,6 +308,18 @@ router.patch('/:id', async (req, res) => {
       if (!isAdmin) {
         isAuthorizedVolunteer = currentItem.assignedUser === userId;
 
+        // Check if this is an initial claim attempt by a volunteer
+        isInitialClaimAttempt = (
+          // Request must be in PENDING status
+          currentItem.status === 'PENDING' &&
+          // Request must not have an assigned user
+          !currentItem.assignedUser &&
+          // Update must include status change to IN_PROGRESS
+          updateData.status === 'IN_PROGRESS' &&
+          // Update must set assignedUser to the current user
+          updateData.assignedUser === userId
+        );
+
         // Check for restricted operations for volunteers
         if (isAuthorizedVolunteer) {
           // 1. Volunteer cannot change status from DONE to PENDING
@@ -325,8 +340,8 @@ router.patch('/:id', async (req, res) => {
         }
       }
 
-      // If neither admin nor authorized volunteer, deny access
-      if (!isAdmin && !isAuthorizedVolunteer) {
+      // If not admin, not authorized volunteer, and not an initial claim attempt, deny access
+      if (!isAdmin && !isAuthorizedVolunteer && !isInitialClaimAttempt) {
         return res.status(403).json({
           success: false,
           message: 'Access denied. You are not authorized to update this request.'
@@ -339,8 +354,6 @@ router.patch('/:id', async (req, res) => {
         message: 'Could not verify user status'
       });
     }
-
-    // At this point, the user is either an admin or the assigned volunteer with valid update permissions
 
     // Update the item in DynamoDB
     const updatedItem = await dynamoService.updateItem(id, updateData);
@@ -355,7 +368,8 @@ router.patch('/:id', async (req, res) => {
       userInfo: {
         userId: userId,
         isAdmin: isAdmin,
-        isAssignedVolunteer: isAuthorizedVolunteer
+        isAssignedVolunteer: isAuthorizedVolunteer,
+        isInitialClaim: isInitialClaimAttempt
       }
     });
   } catch (err) {
