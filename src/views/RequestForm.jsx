@@ -13,6 +13,7 @@ import { v4 as uuid } from 'uuid';
 import NavBar from '../components/NavBar';
 import { uploadData } from 'aws-amplify/storage';
 import { withTranslation } from 'react-i18next';
+import './RequestForm.css';
 
 const apiName = 'fcjemergency';
 const path = '/requesters';
