@@ -41,7 +41,8 @@
         "WATER",
         "FOOD",
         "SHELTER",
-        "BODY_BAGS"
+        "BODY_BAGS",
+        "FEMININE_PRODUCTS"
       ]
     },
     {
@@ -71,6 +72,10 @@
     },
     {
       "fieldName": "body_bags_quantity",
+      "fieldType": "number"
+    },
+    {
+      "fieldName": "feminine_products_quantity",
       "fieldType": "number"
     },
     {

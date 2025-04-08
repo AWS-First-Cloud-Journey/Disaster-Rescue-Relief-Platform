@@ -555,6 +555,12 @@ function RequestDetail(props) {
                   <div>{request.bodyBag} {t("detail-request-page.card.unit")}</div>
                 </div>
               )}
+              {request.feminineProducts > 0 && (
+                <div>
+                  <Box variant="awsui-key-label">{t("detail-request-page.card.feminine_products")}</Box>
+                  <div>{request.feminineProducts} {t("detail-request-page.card.feminine_products_unit")}</div>
+                </div>
+              )}
             </ColumnLayout>
 
             {request.mapLink && (

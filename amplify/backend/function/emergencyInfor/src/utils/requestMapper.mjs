@@ -23,7 +23,7 @@ export const mapRequestToDynamoSchema = (frontendData) => {
   const id = frontendData.id || `req-${Date.now()}`;
 
   // Determine request types based on quantities
-  // Using the exact enum values from schema: MEDICAL_SUPPLIES, SLEEPING_BAGS, WATER, FOOD, SHELTER, BODY_BAGS
+  // Using the exact enum values from schema: MEDICAL_SUPPLIES, SLEEPING_BAGS, WATER, FOOD, SHELTER, BODY_BAGS, FEMININE_PRODUCTS
   const requestTypes = [];
   if (parseInt(frontendData.supply) > 0)
     requestTypes.push('MEDICAL_SUPPLIES');
@@ -37,6 +37,8 @@ export const mapRequestToDynamoSchema = (frontendData) => {
     requestTypes.push('SHELTER');
   if (parseInt(frontendData.bodyBag) > 0)
     requestTypes.push('BODY_BAGS');
+  if (parseInt(frontendData.feminineProducts) > 0)
+    requestTypes.push('FEMININE_PRODUCTS');
 
   // Ensure status is one of the allowed values
   let status = frontendData.status || 'PENDING';
@@ -62,6 +64,7 @@ export const mapRequestToDynamoSchema = (frontendData) => {
     food_meals_quantity: parseInt(frontendData.food) || 0,
     shelter_people_quantity: parseInt(frontendData.shelter) || 0,
     body_bags_quantity: parseInt(frontendData.bodyBag) || 0,
+    feminine_products_quantity: parseInt(frontendData.feminineProducts) || 0,
     image_key: frontendData.imageKey || null,
     created_at: frontendData.createdAt || new Date().toISOString(),
     status: status,
@@ -98,6 +101,7 @@ export const mapDynamoToFrontendSchema = (dynamoData) => {
     food: dynamoData.food_meals_quantity || 0,
     shelter: dynamoData.shelter_people_quantity || 0,
     bodyBag: dynamoData.body_bags_quantity || 0,
+    feminineProducts: dynamoData.feminine_products_quantity || 0,
     // Handle both array and string formats for backward compatibility
     requestTypes: Array.isArray(dynamoData.req_all_types)
       ? dynamoData.req_all_types
@@ -150,7 +154,8 @@ export const validateUpdateData = (updateData) => {
     'water_liters',
     'food_meals_quantity',
     'shelter_people_quantity',
-    'body_bags_quantity'
+    'body_bags_quantity',
+    'feminine_products_quantity'
   ];
 
   numberFields.forEach(field => {

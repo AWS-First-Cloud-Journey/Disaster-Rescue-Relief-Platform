@@ -129,7 +129,7 @@
         "submit": "Submit"
       },
       "success_mess": "Created success",
-      "error_mess": "Error! An error occurred. Please try again.",
+      "error_mess": "Error! An error occurred. Please try again",
       "warning_mess": "Please provide the information below"
     },
     "volunteer-page": {
@@ -206,6 +206,9 @@
         "shelter": "Shelter",
         "shelter_unit": "People",
         "body_bag": "Body Bags",
+        "body_bag_unit": "units",
+        "feminine_products": "Feminine Products",
+        "feminine_products_unit": "units",
         "location": "Location",
         "view_map": "View Location on Map",
         "image": "Image"
