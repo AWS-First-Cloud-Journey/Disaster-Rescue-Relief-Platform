@@ -21,7 +21,10 @@
         "label": "အသုံးပြုသူအမည်:",
         "placeholder": "သင့်အသုံးပြုသူအမည်ကို ထည့်သွင်းပါ။"
       },
-
+      "name": {
+        "label": "နာမည်:",
+        "placeholder": "သင့်အမည်ကို ထည့်သွင်းပါ။"
+      },
       "phone_number": {
         "label": "ဖုန်းနံပါတ်:",
         "placeholder": "သင်၏ဖုန်းနံပါတ်ကို ထည့်ပါ။"
@@ -39,7 +42,8 @@
       "confirm": "အတည်ပြုရန်",
       "loading_text": "တင်နေသည်",
       "no_matches": "တိုက်ဆိုင်မှု မတွေ့ပါ။",
-      "clear_filter": "စစ်ထုတ်မှုကို ရှင်းလင်းပါ။"
+      "clear_filter": "စစ်ထုတ်မှုကို ရှင်းလင်းပါ။",
+      "back-to-home": "ပင်မစာမျက်နှာသို့ ပြန်သွားပါ။"
     },
     "nav": {
       "logo-text": "ဘေးအန္တရာယ်ကယ်ဆယ်ရေး",
@@ -47,6 +51,7 @@
         "links-req": "အကူအညီတောင်းရန်",
         "links-vol": "စေတနာ့ဝန်ထမ်း",
         "links-dash": "အကူအညီတောင်းဆိုမှုများ စာရင်း",
+        "links-faq": "မေးခွန်းများ",
         "links-management": "စီမံခန့်ခွဲမှု"
       },
       "login": "အကောင့်ဝင်ရန်",
@@ -283,6 +288,19 @@
       "volunteers": "စေတနာ့ဝန်ထမ်း",
       "unverified_tab": "အတည်မပြုရသေးသော စေတနာ့ဝန်ထမ်းများ",
       "verified_tab": "စိစစ်ပြီး စေတနာ့ဝန်ထမ်း"
+    },
+    "faq-page": {
+      "title": "မေးခွန်းများ",
+      "q1": "What is ReliefConnect?",
+      "a1": " ReliefConnect is a disaster response platform that connects people affected by disasters with volunteers and resources. Currently, we're supporting relief efforts for the Myanmar earthquake while maintaining readiness for other emergencies.",
+      "q2": "How can I use this platform?",
+      "a2": "You can either request assistance if you're in an affected area or volunteer to help. Select 'Request Help' if you need assistance or 'Volunteer Now' if you want to volunteer.",
+      "q3": "Who can request assistance?",
+      "a3": "Anyone in disaster-affected areas can request help. Currently, we're focusing our efforts on those affected by the Myanmar earthquake.",
+      "q4": "Is this service free?",
+      "a4": "Yes, all assistance is provided free of charge by volunteers.",
+      "q5": "How can I provide feedback?",
+      "a5": "You can contact our team at XXX@email.com to provide your feedback."
     }
   }
 }
