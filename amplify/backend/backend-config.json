@@ -96,6 +96,22 @@
         }
       ]
     },
+    "AMPLIFY_function_emergencyresponseappd1b77548PostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "emergencyresponseappd1b77548PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_emergencyresponseappd1b77548PostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "emergencyresponseappd1b77548PostConfirmation"
+        }
+      ]
+    },
     "AMPLIFY_function_volunteers_deploymentBucketName": {
       "usedBy": [
         {
