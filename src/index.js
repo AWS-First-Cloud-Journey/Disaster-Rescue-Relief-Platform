@@ -19,7 +19,7 @@ import {
   Route,
   RouterProvider,
   BrowserRouter,
-  Navigate,
+  Navigate
 } from "react-router-dom";
 
 //Import views
@@ -33,21 +33,21 @@ import RequestDetail from "./views/RequestDetail";
 import VolunteerManagement from "./views/VolunteerManagement";
 
 Amplify.configure(awsExports);
-
-const router = createHashRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/request",
-    element: <ResquestForm />,
-  },
-  {
-    path: "/requestList",
-    element: <ResquestList />,
-  },
-]);
+ 
+ const router = createHashRouter([
+   {
+     path: "/",
+     element: <Home />,
+   },
+   {
+     path: "/request",
+     element: <ResquestForm />,
+   },
+   {
+     path: "/requestList",
+     element: <ResquestList />,
+   },
+ ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

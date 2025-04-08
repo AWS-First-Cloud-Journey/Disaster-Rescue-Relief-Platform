@@ -31,6 +31,7 @@ function RequestForm(props) {
   const [food, setFood] = useState(0);
   const [shelter, setShelter] = useState(0);
   const [bodyBag, setBodyBag] = useState(0);
+  const [feminineProducts, setFeminineProducts] = useState(0);
   const [flashItem, setFlashItem] = useState([]);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -94,6 +95,7 @@ function RequestForm(props) {
       food: food,
       shelter: shelter,
       bodyBag: bodyBag,
+      feminineProducts: feminineProducts,
     };
 
     try {
@@ -125,6 +127,7 @@ function RequestForm(props) {
         food: food,
         shelter: shelter,
         bodyBag: bodyBag,
+        feminineProducts: feminineProducts,
         // Add the image key if uploaded
         imageKey: imageKey,
       };
@@ -173,7 +176,6 @@ function RequestForm(props) {
       <div class="container">
         <h1>{t('request-page.title')}</h1>
         <div class="subtitle">{t('request-page.desc')}</div>
-        <Flashbar items={flashItem} />
         <div class="form-container">
           <h2 class="section-heading">
             {t('request-page.form.title')}
@@ -443,6 +445,29 @@ function RequestForm(props) {
                     </div>
                   </div>
                 </div>
+
+                <div class="request-type">
+                  <div>
+                    <div class="request-type-label">
+                      {t('request-page.form.feminine_products')}
+                    </div>
+                    <div class="request-type-description">
+                      {t('request-page.form.feminine_products_desc')}
+                    </div>
+                    <div class="request-type-details">
+                      <label for="feminineProductsQuantity">
+                        {t('request-page.form.quanity')}{' '}
+                      </label>
+                      <input
+                        type="number"
+                        id="feminineProductsQuantity"
+                        class="quantity-input"
+                        value={feminineProducts}
+                        onChange={(e) => setFeminineProducts(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -524,6 +549,7 @@ function RequestForm(props) {
               />
             </SpaceBetween>
 
+            <Flashbar items={flashItem} />
             <button
               type="button"
               class="continue-btn"

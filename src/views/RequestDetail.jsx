@@ -500,7 +500,8 @@ function RequestDetail(props) {
                     {request.status === 'DONE' && '✓ '}
                     {request.status === 'IN_PROGRESS' && '⟳ '}
                     {request.status === 'PENDING' && '⏱ '}
-                    {t(`detail-request-page.card.${request.status.toLowerCase()}`)}
+                    {t(`volunteer-page.card.${request.status.toLowerCase() === 'done' ? 'completed' : 
+                       request.status.toLowerCase() === 'pending' ? 'pending-l' : 'in-progress-l'}`)}
                   </span>
                 </div>
               </div>

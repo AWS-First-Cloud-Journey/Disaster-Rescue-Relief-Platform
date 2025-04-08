@@ -45,7 +45,7 @@
       "clear_filter": "Clear filter"
     },
     "nav": {
-      "logo-text": "DisasterRescue",
+      "logo-text": "ReliefConnect",
       "links": {
         "links-req": "Request Help",
         "links-vol": "Volunteer",
@@ -57,34 +57,34 @@
     },
     "home": {
       "home": "Home",
-      "title": "Disaster Rescue & Relief Platform",
-      "des": "Connecting those in need with volunteers and resources during disaster situations",
+      "title": "Myanmar Earthquake Relief Hub: Support & Response",
+      "des": "Connecting communities affected by the Myanmar Earthquake with aid and volunteers",
       "req": {
         "title": "Request Help",
-        "desc": "Submit requests for assistance during disasters.\n\n If you're in an affected area, request emergency supplies, medical assistance, or evacuation help.",
+        "desc": "Submit your request here for emergency supplies and shelter, medical assistance and first aid, evacuation support or essential resources. ",
         "btn-txt": "Request Help"
       },
       "vol": {
-        "title": "Volunteer",
-        "desc": "Join rescue efforts and fulfill assistance requests\n\n Verify requests, coordinate with donors, and deliver essential supplies to those in need.",
+        "title": "Be a Volunteer",
+        "desc": "Join rescue efforts, provide on-ground support in affected areas and help distribute essential supplies.",
         "btn-txt": "Volunteer Now"
       },
       "dash": {
         "title": "Requests Dashboard",
-        "desc": "Visualize requests and resource allocation\n\n Access real-time data on help requests, resource distribution, and volunteer activities.",
+        "desc": "Real-time data on emergency support requests, resource distribution and volunteer deployment status.",
         "btn-txt": "View Dashboard"
       },
-      "disaster-title": "Current Disaster Status",
+      "disaster-title": "Live Response Status",
       "disaster-infor": {
         "1": "Active Requests",
-        "2": "Volunteers",
+        "2": "Volunteers Deployed",
         "3": "Fulfilled Requests",
         "4": "Affected Areas"
       }
     },
     "request-page": {
       "title": "Request Help",
-      "desc": "Submit your request for assistance during this disaster situation",
+      "desc": "Submit your request here for emergency supplies and shelter, medical assistance and first aid, evacuation support or essential resources. ",
       "form": {
         "title": "Location & Contact Information",
         "desc": "Provide details about your location and how to contact you",
@@ -116,6 +116,8 @@
         "shelter_desc": "Number of tents or other shelter items needed",
         "body_bag": "Body Bags",
         "body_bag_desc": "Number of body bags needed",
+        "feminine_products": "Feminine Products",
+        "feminine_products_desc": "Number of feminine products needed",
         "image": "Upload Image (Optional)",
         "img-btn": "Choose files",
         "img_uploaded": "No file chosen",
@@ -127,12 +129,12 @@
         "submit": "Submit"
       },
       "success_mess": "Created success",
-      "error_mess": "Error! An error occurred. Please try again later",
-      "warning_mess": "You need enter the important information"
+      "error_mess": "Error! An error occurred. Please try again.",
+      "warning_mess": "Please provide the information below"
     },
     "volunteer-page": {
       "title": "Requests List",
-      "des": "Join rescue efforts and fulfill assistance requests",
+      "des": "Choose a request to provide critical support",
       "card": {
         "title": "Request",
         "name": "Name",
@@ -144,9 +146,9 @@
         "completed": "Completed",
         "in-progress-l": "In Progress",
         "in-progress-u": "IN PROGRESS",
-        "done": "DONE",
-        "pending-u": "PENDING",
-        "pending-l": "Pending",
+        "done": "COMPLETED",
+        "pending-u": "AWAITING RESPONSE",
+        "pending-l": "Awaiting Response",
         "claim-btn": "Claim",
         "done-btn": "Done",
         "assign-btn": "Assign",
@@ -155,9 +157,9 @@
         "filter-title": "Filter status",
         "status-filter": {
           "any": "Any Status",
-          "pending": "PENDING",
+          "pending": "AWAITING RESPONSE",
           "in-progress": "IN PROGRESS",
-          "done": "DONE"
+          "done": "COMPLETED"
         },
         "page-size": "Page size",
         "visible-content": "Select visible content",
@@ -167,12 +169,12 @@
         "no_req": "No request found",
         "req": "requests"
       },
-      "confirm_title_1": "Confirm Request Claim",
-      "confirm_mess_1": "Are you sure you want to claim this request? You will be responsible for fulfilling it.",
-      "confirm_title_2": "Confirm Completion",
-      "confirm_mess_2": "Are you sure you want to mark this request as complete? This action cannot be undone.",
+      "confirm_title_1": "Accept Emergency Support Request",
+      "confirm_mess_1": "Ready to respond? By accepting, you commit to providing assistance and fulfilling the emergency support request.",
+      "confirm_title_2": "Request Completion",
+      "confirm_mess_2": "Please verify that the emergency support request has been completed. This action is final and cannot be changed. ",
       "confirm_title_3": "Reset Request Status",
-      "confirm_mess_3": "Are you sure you want to change this request status back to PENDING? This will make it available for volunteers to claim again.",
+      "confirm_mess_3": "Are you sure you want to change this request status back to AWAITING RESPONSE? This will make it available for volunteers to claim again.",
       "fail_mess": "Failed to claim request. Please try again.",
       "confirm_title_4": "Confirm Request Assignment"
     },
@@ -247,8 +249,8 @@
       "other": "Other",
       "status_chart": "Request Status",
       "in-progress": "In Progress",
-      "done": "Done",
-      "pending": "Pending",
+      "done": "Completed",
+      "pending": "Awaiting Response",
       "all_type": "All Types",
       "all_req": "All Requests",
       "all_status": "All Status",

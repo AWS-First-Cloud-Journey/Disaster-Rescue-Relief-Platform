@@ -54,27 +54,27 @@
     },
     "home": {
       "home": "ပင်မစာမျက်နှာ",
-      "title": "သဘာဝဘေးအန္တရာယ် ကယ်ဆယ်ရေးနှင့် ကူညီရေးပလက်ဖောင်း",
-      "des": "သဘာဝဘေးအန္တရာယ်များအတွင်း အကူအညီလိုအပ်သူများကို စေတနာ့ဝန်ထမ်းများနှင့် အရင်းအမြစ်များနှင့် ချိတ်ဆက်ပေးခြင်း",
+      "title": "Myanmar Earthquake Relief Hub: Support & Response",
+      "desc": "Submit your request here for emergency supplies and shelter, medical assistance and first aid, evacuation support or essential resources. ",
       "req": {
         "title": "အကူအညီတောင်းရန်",
-        "desc": "သဘာဝဘေးအန္တရာယ်များအတွင်း အကူအညီတောင်းခံမှုများကို တင်ပါ။\n\n သင်သည် ထိခိုက်ခံရသော ဒေသတွင် ရှိနေပါက၊ အရေးပေါ်ပစ္စည်းများ၊ ဆေးဝါးအကူအညီ သို့မဟုတ် ခိုလှုံရန်နေရာ အကူအညီကို တောင်းခံပါ။",
+        "desc": "Submit your request here for emergency supplies and shelter, medical assistance and first aid, evacuation support or essential resources. ",
         "btn-txt": "အကူအညီတောင်းရန်"
       },
       "vol": {
-        "title": "စေတနာ့ဝန်ထမ်း",
-        "desc": "ကယ်ဆယ်ရေးလုပ်ငန်းများတွင် ပါဝင်ပြီး အကူအညီတောင်းခံမှုများကို ဖြည့်ဆည်းပေးပါ\n\n တောင်းဆိုမှုများကို အတည်ပြုခြင်း၊ အလှူရှင်များနှင့် ညှိနှိုင်းဆောင်ရွက်ခြင်းနှင့် လိုအပ်သူများထံ အရေးပေါ်ပစ္စည်းများ ပို့ဆောင်ပေးခြင်း။",
+        "title": "Be a Volunteer",
+        "desc": "Join rescue efforts, provide on-ground support in affected areas and help distribute essential supplies.",
         "btn-txt": "ယခုပင် စေတနာ့ဝန်ထမ်းအဖြစ် ပါဝင်ရန်"
       },
       "dash": {
         "title": "အကူအညီတောင်းဆိုမှုများ စာရင်း",
-        "desc": "အကူအညီတောင်းဆိုမှုများနှင့် အရင်းအမြစ် ခွဲဝေမှုကို မြင်သာအောင် ပြသပါ\n\n အကူအညီတောင်းခံမှုများ၊ အရင်းအမြစ်ဖြန့်ဝေမှုနှင့် စေတနာ့ဝန်ထမ်း လုပ်ဆောင်ချက်များဆိုင်ရာ အချိန်နှင့်တပြေးညီ အချက်အလက်များကို ကြည့်ရှုရယူပါ။",
+        "desc": "Real-time data on emergency support requests, resource distribution and volunteer deployment status.",
         "btn-txt": "အကူအညီတောင်ဆိုမှုစာရင်းများကို ကြည့်ရှုရန်"
       },
-      "disaster-title": "လက်ရှိ ဘေးအန္တရာယ် အခြေအနေ",
+      "disaster-title": "Live Response Status",
       "disaster-infor": {
         "1": "လက်ရှိ အကူအညီတောင်းဆိုမှုများ",
-        "2": "စေတနာ့ဝန်ထမ်းများ",
+        "2": "Volunteers Deployed",
         "3": "ဖြည့်ဆည်းပြီးသော အကူအညီတောင်းဆိုမှုများ",
         "4": "ထိခိုက်ခံရသော ဒေသများ"
       }
@@ -113,6 +113,8 @@
         "shelter_desc": "လိုအပ်သော တဲ သို့မဟုတ် အခြား ခိုလှုံရာပစ္စည်း အရေအတွက်",
         "body_bag": "Dead Body အိတ်များ",
         "body_bag_desc": "လိုအပ်သော Dead Body အိတ် အရေအတွက်",
+        "feminine_products": "အမျိုးသမီးထုတ်ကုန်များ",
+        "feminine_products_desc": "အမျိုးသမီး ထုတ်ကုန်များ လိုအပ်သော အရေအတွက်",
         "image": "ဓာတ်ပုံတင်ရန် (လိုအပ်ပါက)",
         "img-btn": "ဖိုင်များ ရွေးချယ်ပါ",
         "img_uploaded": "မည်သည့်ဖိုင်မျှ မရွေးချယ်ရသေးပါ",
@@ -124,12 +126,12 @@
         "submit": "တင်သွင်းရန်"
       },
       "success_mess": "အောင်မြင်စွာ ဖန်တီးပြီးပါပြီ",
-      "error_mess": "အမှား! အမှားတစ်ခု ဖြစ်ပေါ်ခဲ့သည်။ နောက်မှ ထပ်မံကြိုးစားပါ",
-      "warning_mess": "အရေးကြီးသော အချက်အလက်များကို ထည့်သွင်းရန် လိုအပ်သည်"
+      "error_mess": "Error! An error occurred. Please try again.",
+      "warning_mess": "Please provide the information below"
     },
     "volunteer-page": {
       "title": "အကူအညီတောင်းဆိုမှုစာရင်း",
-      "des": "ကယ်ဆယ်ရေးလုပ်ငန်းများတွင် ပါဝင်ပြီး အကူအညီတောင်းခံမှုများကို ဖြည့်ဆည်းပေးပါ",
+      "des": "Choose a request to provide critical support",
       "card": {
         "title": "အကူအညီတောင်းဆိုမှု",
         "name": "အမည်",
@@ -164,10 +166,10 @@
         "no_req": "အကူအညီတောင်းဆိုမှု မတွေ့ရှိပါ",
         "req": "အကူအညီတောင်းဆိုမှုများ"
       },
-      "confirm_title_1": "အကူအညီတောင်းဆိုမှု တာဝန်ယူခြင်းကို အတည်ပြုပါ",
-      "confirm_mess_1": "ဤအကူအညီတောင်းဆိုမှုကို တာဝန်ယူလိုသည်မှာ သေချာပါသလား? သင်သည် ၎င်းကို ဖြည့်ဆည်းပေးရန် တာဝန်ရှိပါမည်။",
-      "confirm_title_2": "ပြီးစီးမှုကို အတည်ပြုပါ",
-      "confirm_mess_2": "ဤအကူအညီတောင်းဆိုမှုကို ပြီးစီးပြီးဟု မှတ်သားလိုသည်မှာ သေချာပါသလား? ဤလုပ်ဆောင်ချက်ကို ပြန်လည်ပြောင်းလဲ၍မရပါ။",
+      "confirm_title_1": "Accept Emergency Support Request",
+      "confirm_mess_1": "Ready to respond? By accepting, you commit to providing assistance and fulfilling the emergency support request.",
+      "confirm_title_2": "Request Completion",
+      "confirm_mess_2": "Please verify that the emergency support request has been completed. This action is final and cannot be changed. ",
       "confirm_title_3": "အကူအညီတောင်းဆိုမှု အခြေအနေကို ပြန်လည်သတ်မှတ်ရန်",
       "confirm_mess_3": "ဤအကူအညီတောင်းဆိုမှု အခြေအနေကို 'ဆိုင်းငံ့ထားဆဲ' သို့ ပြောင်းလဲလိုသည်မှာ သေချာပါသလား? ဤသို့ပြုလုပ်ခြင်းဖြင့် အခြားစေတနာ့ဝန်ထမ်းများ ထပ်မံတာဝန်ယူလို့ ရစေပါမည်။",
       "fail_mess": "အကူအညီတောင်းဆိုမှုကို တာဝန်ယူရန် မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။",
