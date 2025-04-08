@@ -59,27 +59,27 @@
     },
     "home": {
       "home": "ပင်မစာမျက်နှာ",
-      "title": "Myanmar Earthquake Relief Hub: Support & Response",
-      "desc": "Submit your request here for emergency supplies and shelter, medical assistance and first aid, evacuation support or essential resources. ",
+      "title": "မြန်မာ့ငလျင် ကူညီကယ်ဆယ်ရေး",
+      "desc": "မိမိတို့ရဲ့ သဘာဝဘေးအန္တာရယ်နှင့် ပတ်သတ်ပြီး လိုအပ်သည့် အကူအညီများကို တင်ပြနိုင်ပါတယ်။ မိမိတို့အနေဖြင့် စေတနာ့ဝန်ထမ်းများ အဖြစ် ပါဝင်နိုင်ပါတယ်။ ",
       "req": {
         "title": "အကူအညီတောင်းရန်",
-        "desc": "Submit your request here for emergency supplies and shelter, medical assistance and first aid, evacuation support or essential resources. ",
+        "desc": "မိမိတို့ရဲ့ သဘာဝဘေးအန္တာရယ်နှင့် ပတ်သတ်ပြီး လိုအပ်သည့် အကူအညီများကို တင်ပြနိုင်ပါတယ်။ ",
         "btn-txt": "အကူအညီတောင်းရန်"
       },
       "vol": {
-        "title": "Be a Volunteer",
-        "desc": "Join rescue efforts, provide on-ground support in affected areas and help distribute essential supplies.",
+        "title": "စေတနာ့ဝန်ထမ်းဖြစ်ရန် လျောက်ထားရန်",
+        "desc": "ကူညီကယ်ဆယ်ရေး လုပ်ငန်းများတွင် ပါဝင်ပြီး ထောက်ပံ့ကူညီနိုင်ဖို့ စာရင်းပေးသွင်းလိုက်ပါ",
         "btn-txt": "ယခုပင် စေတနာ့ဝန်ထမ်းအဖြစ် ပါဝင်ရန်"
       },
       "dash": {
         "title": "အကူအညီတောင်းဆိုမှုများ စာရင်း",
-        "desc": "Real-time data on emergency support requests, resource distribution and volunteer deployment status.",
+        "desc": "အကူညီတောင်းဆိုမှု၊ ပစ္စည်းများ ဖြန့်ဝေမှု နှင့် စေတနာ့ဝန်ထမ်းများ လုပ်ဆောင်မှုများ တိုက်ရိုက် အခြေအနေများ",
         "btn-txt": "အကူအညီတောင်ဆိုမှုစာရင်းများကို ကြည့်ရှုရန်"
       },
-      "disaster-title": "Live Response Status",
+      "disaster-title": "လက်ရှိ အခြေအနေ",
       "disaster-infor": {
-        "1": "လက်ရှိ အကူအညီတောင်းဆိုမှုများ",
-        "2": "Volunteers Deployed",
+        "1": "လက်ရှိ အကူအညီတောင်းဆိုမှုများ အရေအတွက်",
+        "2": "လက်ရှိ စေတနာ့ဝန်ထမ်းများ အရေအတွက်",
         "3": "ဖြည့်ဆည်းပြီးသော အကူအညီတောင်းဆိုမှုများ",
         "4": "ထိခိုက်ခံရသော ဒေသများ"
       }
@@ -131,12 +131,12 @@
         "submit": "တင်သွင်းရန်"
       },
       "success_mess": "အောင်မြင်စွာ ဖန်တီးပြီးပါပြီ",
-      "error_mess": "Error! An error occurred. Please try again.",
-      "warning_mess": "Please provide the information below"
+      "error_mess": "Error! အဆင်မပြေမှုဖြစ်သွားသည့်အတွက် နောက်တစ်ခါ ပြန်လည်ကြိုးစားပေးပါ။",
+      "warning_mess": "အောက်ပါ အချက်အလက်များ ဖြည့်ရန်လိုအပ်ပါသည်။"
     },
     "volunteer-page": {
       "title": "အကူအညီတောင်းဆိုမှုစာရင်း",
-      "des": "Choose a request to provide critical support",
+      "des": "အရေးကြီး အကူအညီတောင်းခံရန်အတွက်",
       "card": {
         "title": "အကူအညီတောင်းဆိုမှု",
         "name": "အမည်",
@@ -171,10 +171,10 @@
         "no_req": "အကူအညီတောင်းဆိုမှု မတွေ့ရှိပါ",
         "req": "အကူအညီတောင်းဆိုမှုများ"
       },
-      "confirm_title_1": "Accept Emergency Support Request",
-      "confirm_mess_1": "Ready to respond? By accepting, you commit to providing assistance and fulfilling the emergency support request.",
-      "confirm_title_2": "Request Completion",
-      "confirm_mess_2": "Please verify that the emergency support request has been completed. This action is final and cannot be changed. ",
+      "confirm_title_1": "အရေးပေါ်အကူအညီပေးရန် သဘောတူ လက်ခံပါတယ်",
+      "confirm_mess_1": "အရေးပေါ်အကူအညီများကို ကို ထောက်ပံ့ကူညီပေးဖို့ သဘောတူလက်ခံပါတယ်?",
+      "confirm_title_2": "တောင်းဆိုတွင်သွင်မှု ပြီးမြောက်ပါပြီ",
+      "confirm_mess_2": "ကျေးဇူးပြုပြီး တောင်းဆိုထားသည့် အချက်လက်အများမှန်ကန်ကြောင်း အတည်ပြုပါ။ ဤအတည်ပြုချက်မှာ ဤအဆင့်ပြီးလျှင် ပြင်ဆင်၍မရနိုင်တော့ပါ။ ",
       "confirm_title_3": "အကူအညီတောင်းဆိုမှု အခြေအနေကို ပြန်လည်သတ်မှတ်ရန်",
       "confirm_mess_3": "ဤအကူအညီတောင်းဆိုမှု အခြေအနေကို 'ဆိုင်းငံ့ထားဆဲ' သို့ ပြောင်းလဲလိုသည်မှာ သေချာပါသလား? ဤသို့ပြုလုပ်ခြင်းဖြင့် အခြားစေတနာ့ဝန်ထမ်းများ ထပ်မံတာဝန်ယူလို့ ရစေပါမည်။",
       "fail_mess": "အကူအညီတောင်းဆိုမှုကို တာဝန်ယူရန် မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။",
@@ -236,7 +236,7 @@
         "no-data": "ယခင်အပတ်ကထက် ပြောင်းလဲမှုမရှိပါ။"
       },
       "chart": {
-        "title": "တောင်းဆိုမှုအမျိုးအစားများ",
+        "title": "အကူအညီတောင်းဆိုမှု အမျိုးအစားများ",
         "time": {
           "time-1": "7 ရက်",
           "time-2": "30 ရက်",
@@ -291,16 +291,16 @@
     },
     "faq-page": {
       "title": "မေးခွန်းများ",
-      "q1": "What is ReliefConnect?",
-      "a1": " ReliefConnect is a disaster response platform that connects people affected by disasters with volunteers and resources. Currently, we're supporting relief efforts for the Myanmar earthquake while maintaining readiness for other emergencies.",
-      "q2": "How can I use this platform?",
-      "a2": "You can either request assistance if you're in an affected area or volunteer to help. Select 'Request Help' if you need assistance or 'Volunteer Now' if you want to volunteer.",
-      "q3": "Who can request assistance?",
-      "a3": "Anyone in disaster-affected areas can request help. Currently, we're focusing our efforts on those affected by the Myanmar earthquake.",
-      "q4": "Is this service free?",
-      "a4": "Yes, all assistance is provided free of charge by volunteers.",
-      "q5": "How can I provide feedback?",
-      "a5": "You can contact our team at XXX@email.com to provide your feedback."
+      "q1": "ReliefConnect က ဘာလဲ?",
+      "a1": " ReliefConnect က သဘာဝ ဘေးဒဏ် ကျရောက်တဲ့ နေရာတွေမှာ အကူအညီ လိုအပ်နေတဲ့ သူတွေနဲ့ အကူအညီပေးနိုင်မယ် အကူအညီပေးလိုတဲ့ သူတွေကို ဆက်သွယ်ပေးတဲ့ platform တစ်ခုပဲဖြစ်ပါတယ်။  အခုအချိန်မှာ မြန်မာနိုင်ငံမှာ ဖြစ်သွားတဲ့ ငလျင်ဘေးအန္တရာယ်အတွက် အမြန်ဆုံး ချိတ်ဆက်ပေးနိုင်အောင် ပြုလုပ်ထားပြီး အခြား ဘေးအန္တရာယ်များ ဖြစ်ပွားလာခဲ့လျင် အကူအညီတွေကို အချိန်နဲ့ တပြေးညီ ချတ်ဆက်ပေးနိုင်ဖို့ ရည်ရွယ်ပါတယ်။",
+      "q2": "ဘယ်လို အသုံးပြုရမလဲ?",
+      "a2": "အကူအညီပဲချင်တဲ့သူတွေပဲဖြစ်ဖြစ် အကူအညီ လိုအပ်သူများဖြစ်ဖြစ် ဤ platform ကနေဆင့် ချိတ်ဆက် အကူအညီပေးနိုင်ပါတယ်။ အကူအညီပေးမည်ဆိုလျှင် "စေတနာ့ဝန်ထမ်းအဖြစ် ပါဝင်ရန်" ကိုရွေးပါ။ အကူအညီလိုအပ်လျှင် "အကူအညီတောင်းရန်"ကို ရွေးရမှာဖြစ်ပါတယ်။",
+      "q3": "ဘယ်သူတွေ အကူအညီတောင်းလို့ ရနိုင်ပါသလဲ?",
+      "a3": "သဘာဝဘေးဒဏ်ကျရောက်ခံရောက်ခံစားရတဲ့ နေရာဒေသက မည်သူမဆို အကူအညီတောင်းခံနိုင်ပါတယ်။ ယခု အခြေအနေမှာတော့ ငလျှင်ဒဏ် ခံစားရတဲ့ နေရာများကို ဦးစားပေးပါမယ်။",
+      "q4": "ဤ platform သုံးစွဲရန်အတွက် ဝန်ဆောင်မှုခ ပေးစရာလိုအပ်ပါသလား?",
+      "a4": "စေတနာ့ဝန်းထမ်းများမှ ကူညီရေးစွဲထားသည့် ဝန်ဆောင်မှုဖြစ်သည့်အတွက် ဝန်ဆောင်ခ ပေးစရာမလိုပါ။",
+      "q5": "အကြံဥာဏ်နှင့် တောင်းဆိုမှုများ မည့်သို့ တင်သွင်းနိုင်ပါသလဲ?",
+      "a5": "contact@myanmardisasterrelief.com အီးမေးသို့ ဆက်သွယ်ပြောကြားနိုင်ပါသည်။"
     }
   }
 }
