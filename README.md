@@ -1,8 +1,8 @@
-# DisasterRescue Platform
+# Relief Connect Platform
 
 ## Overview
 
-DisasterRescue is a comprehensive serverless web application designed to connect those affected by disasters with volunteers and resources. Built on AWS serverless architecture, the platform facilitates coordination between individuals in need, volunteers, and resource managers, providing real-time data visualization and efficient resource allocation tracking.
+Relief Connect is a comprehensive serverless web application designed to connect those affected by disasters with volunteers and resources. Built on AWS serverless architecture, the platform facilitates coordination between individuals in need, volunteers, and resource managers, providing real-time data visualization and efficient resource allocation tracking.
 
 ## Key Features
 
@@ -42,7 +42,7 @@ DisasterRescue is a comprehensive serverless web application designed to connect
 ## Project Structure
 
 ```
-DisasterRescue/
+ReliefConnect/
 ├── amplify/              # AWS Amplify configuration
 │   ├── backend/          # Backend resources
 │   │   ├── api/          # API definitions
