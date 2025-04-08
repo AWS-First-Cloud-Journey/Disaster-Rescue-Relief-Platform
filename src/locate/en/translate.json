@@ -116,6 +116,8 @@
         "shelter_desc": "Number of tents or other shelter items needed",
         "body_bag": "Body Bags",
         "body_bag_desc": "Number of body bags needed",
+        "feminine_products": "Feminine Products",
+        "feminine_products_desc": "Number of feminine products needed",
         "image": "Upload Image (Optional)",
         "img-btn": "Choose files",
         "img_uploaded": "No file chosen",
