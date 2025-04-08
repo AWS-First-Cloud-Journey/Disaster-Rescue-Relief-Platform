@@ -79,6 +79,7 @@ function NavBar(props) {
               {t("nav.links.links-req")}
             </a>
           </div>
+          
         ) : authenticated && user["custom:role"] === "admin" ? (
           <div class="nav-links">
             <a
@@ -131,6 +132,15 @@ function NavBar(props) {
               }
             >
               {t("nav.links.links-vol")}
+            </a>
+
+            <a
+              onClick={() => navigate("/faq")}
+              className={
+                location.pathname === "/faq" ? "nar-link-active" : ""
+              }
+            >
+              {t("nav.links.links-faq")}
             </a>
           </div>
         )}
