@@ -1,168 +1,174 @@
 /* Home.css */
 
+/* Fix class names to match JSX component */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .home-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  /* Hero Section */
-  .hero {
-    text-align: center;
-    padding: 60px 20px;
-    background-color: #f8f9fa;
-    border-radius: 10px;
-    margin: 30px 0;
-  }
-  
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  margin: 30px 0;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #555;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Card Container */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin: 50px 0;
+}
+
+.card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.card p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.card-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: 500;
+}
+
+.card-button:hover {
+  background-color: #2980b9;
+}
+
+/* Statistics Section */
+.statistics {
+  margin: 50px 0;
+  padding: 30px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+/* Fix class name to match JSX component */
+.stats-stitle {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 2rem;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  padding: 25px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.stat-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.number {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+/* Stat Card Colors */
+.red {
+  background-color: #e74c3c;
+}
+
+.yellow {
+  background-color: #f39c12;
+}
+
+.green {
+  background-color: #2ecc71;
+}
+
+.blue {
+  background-color: #3498db;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
   .hero h1 {
-    font-size: 2.5rem;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .hero p {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    color: #555;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  /* Card Container */
-  .card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin: 50px 0;
-  }
-  
-  .card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
-  }
-  
-  .card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-  }
-  
-  .card-icon {
-    font-size: 3rem;
-    margin-bottom: 20px;
-  }
-  
-  .card h2 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 15px;
-  }
-  
-  .card p {
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-  
-  .card-button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-weight: 500;
-  }
-  
-  .card-button:hover {
-    background-color: #2980b9;
-  }
-  
-  /* Statistics Section */
-  .statistics {
-    margin: 50px 0;
-    padding: 30px;
-    background-color: #f8f9fa;
-    border-radius: 10px;
-  }
-  
-  .stats-title {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #333;
     font-size: 2rem;
   }
   
+  .hero p {
+    font-size: 1rem;
+  }
+  
+  .card-container {
+    grid-template-columns: 1fr;
+  }
+  
   .stats-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: 1fr 1fr;
   }
-  
-  .stat-card {
-    padding: 25px;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    color: white;
+}
+
+@media (max-width: 480px) {
+  .stats-container {
+    grid-template-columns: 1fr;
   }
-  
-  .stat-card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-    font-weight: 500;
-  }
-  
-  .number {
-    font-size: 2.5rem;
-    font-weight: bold;
-  }
-  
-  /* Stat Card Colors */
-  .red {
-    background-color: #e74c3c;
-  }
-  
-  .yellow {
-    background-color: #f39c12;
-  }
-  
-  .green {
-    background-color: #2ecc71;
-  }
-  
-  .blue {
-    background-color: #3498db;
-  }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .hero h1 {
-      font-size: 2rem;
-    }
-    
-    .hero p {
-      font-size: 1rem;
-    }
-    
-    .card-container {
-      grid-template-columns: 1fr;
-    }
-    
-    .stats-container {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .stats-container {
-      grid-template-columns: 1fr;
-    }
-  }
+}

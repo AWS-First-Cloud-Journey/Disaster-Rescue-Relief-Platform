@@ -1,4 +1,44 @@
 {
+  "master": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-emergencyresponseapp-master-83460-authRole",
+      "UnauthRoleArn": "arn:aws:iam::869442500907:role/amplify-emergencyresponseapp-master-83460-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::869442500907:role/amplify-emergencyresponseapp-master-83460-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-emergencyresponseapp-master-83460-deployment",
+      "UnauthRoleName": "amplify-emergencyresponseapp-master-83460-unauthRole",
+      "StackName": "amplify-emergencyresponseapp-master-83460",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:869442500907:stack/amplify-emergencyresponseapp-master-83460/1a342a00-1454-11f0-b918-020c35858941",
+      "AmplifyAppId": "dbk3j69vn549n",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-emergencyresponseapp-master-83460-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-emergencyresponseapp-master-83460-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "emergencyresponseappd1b77548": {}
+      },
+      "function": {
+        "emergencyInfor": {
+          "deploymentBucketName": "amplify-emergencyresponseapp-master-83460-deployment",
+          "s3Key": "amplify-builds/emergencyInfor-34362f63734c47683662-build.zip"
+        },
+        "emergencyresponseappd1b77548PostConfirmation": {
+          "deploymentBucketName": "amplify-emergencyresponseapp-master-83460-deployment",
+          "s3Key": "amplify-builds/emergencyresponseappd1b77548PostConfirmation-51774a61757a596c6e65-build.zip"
+        },
+        "volunteers": {
+          "deploymentBucketName": "amplify-emergencyresponseapp-master-83460-deployment",
+          "s3Key": "amplify-builds/volunteers-6f56536f37446e345862-build.zip"
+        }
+      },
+      "storage": {
+        "EmergencyInfor": {},
+        "requestHistory": {},
+        "requestershub": {},
+        "volunteers": {}
+      }
+    }
+  },
   "stg": {
     "awscloudformation": {
       "AuthRoleName": "amplify-emergencyresponseapp-stg-b41b5-authRole",
