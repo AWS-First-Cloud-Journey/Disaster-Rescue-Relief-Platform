@@ -176,7 +176,6 @@ function RequestForm(props) {
       <div class="container">
         <h1>{t('request-page.title')}</h1>
         <div class="subtitle">{t('request-page.desc')}</div>
-        <Flashbar items={flashItem} />
         <div class="form-container">
           <h2 class="section-heading">
             {t('request-page.form.title')}
@@ -550,6 +549,7 @@ function RequestForm(props) {
               />
             </SpaceBetween>
 
+            <Flashbar items={flashItem} />
             <button
               type="button"
               class="continue-btn"
