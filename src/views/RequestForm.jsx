@@ -300,6 +300,7 @@ function RequestForm(props) {
                 value={personCount}
                 onChange={(e) => setPersonCount(e.target.value)}
                 placeholder={t('request-page.form.individuals_place')}
+                min="0"
                 required
               />
             </div>
@@ -327,6 +328,7 @@ function RequestForm(props) {
                         class="quantity-input"
                         value={supply}
                         onChange={(e) => setSupply(e.target.value)}
+                        min="0"
                       />
                     </div>
                   </div>
@@ -350,6 +352,7 @@ function RequestForm(props) {
                         class="quantity-input"
                         value={bag}
                         onChange={(e) => setBag(e.target.value)}
+                        min="0"
                       />
                     </div>
                   </div>
@@ -373,6 +376,7 @@ function RequestForm(props) {
                         class="quantity-input"
                         value={water}
                         onChange={(e) => setWater(e.target.value)}
+                        min="0"
                       />
                     </div>
                   </div>
@@ -396,6 +400,7 @@ function RequestForm(props) {
                         class="quantity-input"
                         value={food}
                         onChange={(e) => setFood(e.target.value)}
+                        min="0"
                       />
                     </div>
                   </div>
@@ -419,6 +424,7 @@ function RequestForm(props) {
                         class="quantity-input"
                         value={shelter}
                         onChange={(e) => setShelter(e.target.value)}
+                        min="0"
                       />
                     </div>
                   </div>
@@ -442,6 +448,7 @@ function RequestForm(props) {
                         class="quantity-input"
                         value={bodyBag}
                         onChange={(e) => setBodyBag(e.target.value)}
+                        min="0"
                       />
                     </div>
                   </div>
@@ -465,6 +472,7 @@ function RequestForm(props) {
                         class="quantity-input"
                         value={feminineProducts}
                         onChange={(e) => setFeminineProducts(e.target.value)}
+                        min="0"
                       />
                     </div>
                   </div>
