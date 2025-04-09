@@ -77,13 +77,13 @@ function AuthForm(props) {
       username: {
         label: "Email",
         placeholder: "Enter your Email",
-        isRequired: false,
+        isRequired: true,
         order: 1,
       },
       password: {
         label: "Password",
         placeholder: "Enter your Password",
-        isRequired: false,
+        isRequired: true,
         order: 2,
       },
     },
