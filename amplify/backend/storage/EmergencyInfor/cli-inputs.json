@@ -98,6 +98,10 @@
     {
       "fieldName": "assigned_user",
       "fieldType": "string"
+    },
+    {
+      "fieldName": "additional_info",
+      "fieldType": "string"
     }
   ]
 }

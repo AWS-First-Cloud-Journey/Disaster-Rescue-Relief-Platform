@@ -68,8 +68,8 @@ export const mapRequestToDynamoSchema = (frontendData) => {
     image_key: frontendData.imageKey || null,
     created_at: frontendData.createdAt || new Date().toISOString(),
     status: status,
-    // Use assigned_user to match schema exactly (snake_case)
     assigned_user: frontendData.assignedUser || null,
+    additional_info: frontendData.additionalInfo || '',
 
     // Optional fields not in the core schema but might be used
     updated_at: frontendData.updatedAt || null,
@@ -113,6 +113,7 @@ export const mapDynamoToFrontendSchema = (dynamoData) => {
     // Map DB fields to frontend (camelCase)
     imageKey: dynamoData.image_key,
     assignedUser: dynamoData.assigned_user,
+    additionalInfo: dynamoData.additional_info || '',
 
     // Include additional metadata fields
     updatedAt: dynamoData.updated_at || null,
@@ -139,10 +140,37 @@ export const validateUpdateData = (updateData) => {
     throw new Error('Invalid status value. Must be PENDING, IN_PROGRESS, or DONE');
   }
 
-  // Convert assignedUser to assigned_user
+  // Convert frontend camelCase to DB snake_case
   if (updateData.assignedUser !== undefined) {
     validatedData.assigned_user = updateData.assignedUser;
     delete validatedData.assignedUser;
+  }
+
+  // Convert additionalInfo to additional_info if present
+  if (updateData.additionalInfo !== undefined) {
+    validatedData.additional_info = updateData.additionalInfo;
+    delete validatedData.additionalInfo;
+  }
+
+  // Handle update metadata conversions
+  if (updateData.updatedAt !== undefined) {
+    validatedData.updated_at = updateData.updatedAt;
+    delete validatedData.updatedAt;
+  }
+
+  if (updateData.updatedBy !== undefined) {
+    validatedData.updated_by = updateData.updatedBy;
+    delete validatedData.updatedBy;
+  }
+
+  if (updateData.completedAt !== undefined) {
+    validatedData.completed_at = updateData.completedAt;
+    delete validatedData.completedAt;
+  }
+
+  if (updateData.completedBy !== undefined) {
+    validatedData.completed_by = updateData.completedBy;
+    delete validatedData.completedBy;
   }
 
   // Ensure number fields are properly parsed
