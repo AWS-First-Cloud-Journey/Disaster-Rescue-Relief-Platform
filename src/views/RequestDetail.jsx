@@ -500,8 +500,8 @@ function RequestDetail(props) {
                     {request.status === 'DONE' && '✓ '}
                     {request.status === 'IN_PROGRESS' && '⟳ '}
                     {request.status === 'PENDING' && '⏱ '}
-                    {t(`volunteer-page.card.${request.status.toLowerCase() === 'done' ? 'completed' : 
-                       request.status.toLowerCase() === 'pending' ? 'pending-l' : 'in-progress-l'}`)}
+                    {t(`volunteer-page.card.${request.status.toLowerCase() === 'done' ? 'completed' :
+                      request.status.toLowerCase() === 'pending' ? 'pending-l' : 'in-progress-l'}`)}
                   </span>
                 </div>
               </div>
@@ -570,12 +570,23 @@ function RequestDetail(props) {
               )}
             </ColumnLayout>
 
+            {request.additionalInfo && (
+              <>
+                <Box variant="h2">{t("detail-request-page.card.additional_info")}</Box>
+                <Box padding="s">
+                  {request.additionalInfo.split('\n').map((line, index) => (
+                    <div key={index}>{line}</div>
+                  ))}
+                </Box>
+              </>
+            )}
+
             {request.mapLink && (
               <>
                 <Box variant="h2">{t("detail-request-page.card.location")}</Box>
                 <Box>
                   <a href={request.mapLink} target="_blank" rel="noopener noreferrer">
-                  {t("detail-request-page.card.view_map")}
+                    {t("detail-request-page.card.view_map")}
                   </a>
                 </Box>
               </>

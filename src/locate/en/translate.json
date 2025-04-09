@@ -131,7 +131,10 @@
         "file_size": "File Size",
         "quanity": "Quantity needed:",
         "quatity_liter": "Quantity needed (liters)",
-        "submit": "Submit"
+        "submit": "Submit",
+        "additional_info": "Additional Information",
+        "additional_info_desc": "If you have any additional information or specific requests, please provide them here.",
+        "additional_info_place": "Enter any additional information or specific requests"
       },
       "success_mess": "Created success",
       "error_mess": "Error! An error occurred. Please try again",
@@ -218,7 +221,8 @@
         "other_items_unit": "units",
         "location": "Location",
         "view_map": "View Location on Map",
-        "image": "Image"
+        "image": "Image",
+        "additional_info": "Additional Information"
       },
       "error_reload": "Could not reload request details",
       "error_login": "You need to be logged in with a valid account to claim this request",

@@ -41,6 +41,7 @@ function RequestForm(props) {
   const [imagePreview, setImagePreview] = useState(null);
   const [images, setImages] = React.useState([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [additionalInfo, setAdditionalInfo] = useState('');
   const { t } = props;
 
   const handleImageChange = (e) => {
@@ -117,6 +118,7 @@ function RequestForm(props) {
         // Add the otherItems fields to the data object
         otherItems: otherItems,
         otherItemsQuantity: otherItemsQuantity,
+        additionalInfo: additionalInfo,
         // Add the image key if uploaded
         imageKey: imageKey,
       };
@@ -465,41 +467,24 @@ function RequestForm(props) {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                {/* New "Others" request type */}
-                <div class="request-type">
-                  <div>
-                    <div class="request-type-label">
-                      {t('request-page.form.others')}
-                    </div>
-                    <div class="request-type-description">
-                      {t('request-page.form.others_desc')}
-                    </div>
-                    <div class="other-items-input">
-                      <input
-                        type="text"
-                        id="otherItemsDescription"
-                        class="form-input"
-                        value={otherItems}
-                        onChange={(e) => setOtherItems(e.target.value)}
-                        placeholder={t('request-page.form.others_place')}
-                      />
-                    </div>
-                    <div class="request-type-details" style={{ marginTop: '10px' }}>
-                      <label for="otherItemsQuantity">
-                        {t('request-page.form.quanity')}{' '}
-                      </label>
-                      <input
-                        type="number"
-                        id="otherItemsQuantity"
-                        class="quantity-input"
-                        value={otherItemsQuantity}
-                        onChange={(e) => setOtherItemsQuantity(e.target.value)}
-                        min="0"
-                      />
-                    </div>
-                  </div>
-                </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="additionalInfo">
+                {t('request-page.form.additional_info')}
+              </label>
+              <textarea
+                id="additionalInfo"
+                name="additionalInfo"
+                className="form-textarea"
+                value={additionalInfo}
+                onChange={(e) => setAdditionalInfo(e.target.value)}
+                placeholder={t('request-page.form.additional_info_place')}
+                rows="4"
+              ></textarea>
+              <div className="field-description">
+                {t('request-page.form.additional_info_desc')}
               </div>
             </div>
 
