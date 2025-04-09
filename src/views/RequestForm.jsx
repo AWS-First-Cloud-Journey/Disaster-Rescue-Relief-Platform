@@ -33,6 +33,9 @@ function RequestForm(props) {
   const [shelter, setShelter] = useState(0);
   const [bodyBag, setBodyBag] = useState(0);
   const [feminineProducts, setFeminineProducts] = useState(0);
+  // Add new state for others
+  const [otherItems, setOtherItems] = useState('');
+  const [otherItemsQuantity, setOtherItemsQuantity] = useState(0);
   const [flashItem, setFlashItem] = useState([]);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -81,24 +84,6 @@ function RequestForm(props) {
       return;
     }
 
-    const data = {
-      id: uuid(),
-      name: name,
-      phoneNumber: phoneNumber,
-      address: address,
-      city: city,
-      township: township,
-      mapLink: mapLink,
-      personCount: personCount,
-      supply: supply,
-      bag: bag,
-      water: water,
-      food: food,
-      shelter: shelter,
-      bodyBag: bodyBag,
-      feminineProducts: feminineProducts,
-    };
-
     try {
       // Upload image to S3 if one is selected
       if (images.length > 0) {
@@ -129,6 +114,9 @@ function RequestForm(props) {
         shelter: shelter,
         bodyBag: bodyBag,
         feminineProducts: feminineProducts,
+        // Add the otherItems fields to the data object
+        otherItems: otherItems,
+        otherItemsQuantity: otherItemsQuantity,
         // Add the image key if uploaded
         imageKey: imageKey,
       };
@@ -477,37 +465,44 @@ function RequestForm(props) {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* <div className="form-group">
-            <label className="form-label" htmlFor="imageUpload">{t("request-page.form.image")}</label>
-            <div className="image-upload-container">
-              <input
-                type="file"
-                id="imageUpload"
-                accept="image/*"
-                className="form-input file-input"
-                onChange={handleImageChange}
-              />
-              <div className="image-upload-info">
-                {t("request-page.form.img_desc")}
-              </div>
-
-              {imagePreview && (
-                <div className="image-preview-container">
-                  <img src={imagePreview} alt="Preview" className="image-preview" />
-                  <button
-                    type="button"
-                    className="remove-image-btn"
-                    onClick={removeImage}
-                  >
-                    Remove Image
-                  </button>
+                {/* New "Others" request type */}
+                <div class="request-type">
+                  <div>
+                    <div class="request-type-label">
+                      {t('request-page.form.others')}
+                    </div>
+                    <div class="request-type-description">
+                      {t('request-page.form.others_desc')}
+                    </div>
+                    <div class="other-items-input">
+                      <input
+                        type="text"
+                        id="otherItemsDescription"
+                        class="form-input"
+                        value={otherItems}
+                        onChange={(e) => setOtherItems(e.target.value)}
+                        placeholder={t('request-page.form.others_place')}
+                      />
+                    </div>
+                    <div class="request-type-details" style={{ marginTop: '10px' }}>
+                      <label for="otherItemsQuantity">
+                        {t('request-page.form.quanity')}{' '}
+                      </label>
+                      <input
+                        type="number"
+                        id="otherItemsQuantity"
+                        class="quantity-input"
+                        value={otherItemsQuantity}
+                        onChange={(e) => setOtherItemsQuantity(e.target.value)}
+                        min="0"
+                      />
+                    </div>
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
-          </div> */}
+
             <SpaceBetween size="s">
               <label className="form-label" htmlFor="imageUpload">
                 {t('request-page.form.image')}

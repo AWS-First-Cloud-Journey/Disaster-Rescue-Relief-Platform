@@ -120,6 +120,9 @@
         "body_bag_desc": "Number of body bags needed",
         "feminine_products": "Feminine Products",
         "feminine_products_desc": "Number of feminine products needed",
+        "others": "Other Items",
+        "others_desc": "Any other items or supplies not listed above that you need",
+        "others_place": "Describe what other items you need",
         "image": "Upload Image (Optional)",
         "img-btn": "Choose files",
         "img_uploaded": "No file chosen",
@@ -211,6 +214,8 @@
         "body_bag_unit": "units",
         "feminine_products": "Feminine Products",
         "feminine_products_unit": "units",
+        "other_items": "Other Items",
+        "other_items_unit": "units",
         "location": "Location",
         "view_map": "View Location on Map",
         "image": "Image"

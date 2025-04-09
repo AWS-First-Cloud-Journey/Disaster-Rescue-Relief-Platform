@@ -20,7 +20,7 @@
       "function": {
         "emergencyInfor": {
           "deploymentBucketName": "amplify-emergencyresponseapp-master-83460-deployment",
-          "s3Key": "amplify-builds/emergencyInfor-34362f63734c47683662-build.zip"
+          "s3Key": "amplify-builds/emergencyInfor-56376d4a4c346267632b-build.zip"
         },
         "emergencyresponseappd1b77548PostConfirmation": {
           "deploymentBucketName": "amplify-emergencyresponseapp-master-83460-deployment",
