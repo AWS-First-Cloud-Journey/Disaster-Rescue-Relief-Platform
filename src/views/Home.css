@@ -32,7 +32,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('https://images.unsplash.com/photo-1622675363311-3e1904dc1885?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+  /* background-image: url('https://images.unsplash.com/photo-1622675363311-3e1904dc1885?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); */
   background-size: cover;
   background-position: center;
   opacity: 0.1;
