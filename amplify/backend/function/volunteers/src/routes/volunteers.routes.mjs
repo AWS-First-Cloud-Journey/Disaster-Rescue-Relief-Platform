@@ -10,7 +10,9 @@ import {
   formatVolunteerData,
   calculateSkillsDistribution,
   calculateLocationDistribution,
-  calculateAvailabilityMetrics
+  calculateAvailabilityMetrics,
+  removeIfAdmin,
+  checkIfUserIsAdmin
 } from '../utils/volunteerUtils.mjs';
 import { historyService } from '../services/history.service.mjs';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
@@ -216,35 +218,16 @@ router.get('/verified', async (req, res) => {
       return res.status(401).json({ error: 'User identity not found in request' });
     }
 
-    // Check if user has admin role by querying Cognito
-    try {
-      const params = {
-        UserPoolId: userPoolId,
-        Username: userId
-      };
-
-      const command = new AdminGetUserCommand(params);
-      const response = await cognito.send(command);
-
-      // Check for admin role in user attributes
-      // This could be a custom attribute or group membership
-      const customRoleAttr = response.UserAttributes.find(
-        attr => attr.Name === 'custom:role'
-      );
-
-      const isAdmin = customRoleAttr && customRoleAttr.Value === 'admin';
-
-      if (!isAdmin) {
-        return res.status(403).json({
-          error: 'Access denied. Admin privileges required.'
-        });
-      }
-    } catch (error) {
-      console.error('Error verifying admin status:', error);
-      return res.status(401).json({ error: 'Could not verify admin status' });
+    // Use utility function to check if user is admin
+    const isAdmin = await checkIfUserIsAdmin(userId, userPoolId, cognito);
+    if (!isAdmin) {
+      return res.status(403).json({
+        error: 'Access denied. Admin privileges required.'
+      });
     }
 
-    // Admin is confirmed, continue with listing verified volunteers
+    // Process any newly assigned admin roles by removing them from volunteers table
+    await removeIfAdmin(userId, userPoolId, tableName, cognito, documentClient);
 
     // Parse pagination parameters
     const limit = parseInt(req.query.limit) || 50;
@@ -319,35 +302,16 @@ router.get('/unverified', async (req, res) => {
       return res.status(401).json({ error: 'User identity not found in request' });
     }
 
-    // Check if user has admin role by querying Cognito
-    try {
-      const params = {
-        UserPoolId: userPoolId,
-        Username: userId
-      };
-
-      const command = new AdminGetUserCommand(params);
-      const response = await cognito.send(command);
-
-      // Check for admin role in user attributes
-      // This could be a custom attribute or group membership
-      const customRoleAttr = response.UserAttributes.find(
-        attr => attr.Name === 'custom:role'
-      );
-
-      const isAdmin = customRoleAttr && customRoleAttr.Value === 'admin';
-
-      if (!isAdmin) {
-        return res.status(403).json({
-          error: 'Access denied. Admin privileges required.'
-        });
-      }
-    } catch (error) {
-      console.error('Error verifying admin status:', error);
-      return res.status(401).json({ error: 'Could not verify admin status' });
+    // Use utility function to check if user is admin
+    const isAdmin = await checkIfUserIsAdmin(userId, userPoolId, cognito);
+    if (!isAdmin) {
+      return res.status(403).json({
+        error: 'Access denied. Admin privileges required.'
+      });
     }
 
-    // Admin is confirmed, continue with listing unverified volunteers
+    // Process any newly assigned admin roles by removing them from volunteers table
+    await removeIfAdmin(userId, userPoolId, tableName, cognito, documentClient);
 
     // Parse pagination parameters
     const limit = parseInt(req.query.limit) || 50;
