@@ -60,12 +60,6 @@ function NavBar(props) {
     <>
       <nav class="navbar">
         <a onClick={() => navigate("/")} class="logo">
-          <img
-            src={logo}
-            alt="logo"
-            className="logo-img"
-            style={{ width: "70px", padding: "0px 10px" }}
-          />
           <span>{t("nav.logo-text")}</span>
         </a>
         {!authChecked ? (

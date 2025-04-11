@@ -257,7 +257,7 @@ function Home(props) {
       </div>
 
       <footer className="home-footer">
-        <p>{new Date().getFullYear()} © {t('home.footer')}</p>
+        <p>2025 Myanmar Disaster Relief</p>
       </footer>
     </div>
   );

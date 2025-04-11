@@ -1,6 +1,6 @@
 {
   "home": {
-    "title": "Myanmar Earthquake Aid Coordination",
+    "title": "Myanmar Disaster Relief",
     "des": "A platform connecting disaster victims with volunteers for emergency assistance",
     "features": {
       "title": "Key Features"
@@ -8,7 +8,7 @@
     "req": {
       "title": "Request Support",
       "desc": "Send emergency support requests to volunteers",
-      "btn-txt": "Send Request"
+      "btn-txt": "Submit Request"
     },
     "vol": {
       "title": "Volunteer",
@@ -32,6 +32,21 @@
       "description": "Join now to be part of the emergency support community",
       "button": "Join Now"
     },
-    "footer": "Myanmar Earthquake Aid Coordination"
+    "footer": "2025 Myanmar Disaster Relief"
+  },
+  "translation": {
+    "faq-page": {
+      "need-help": "Need More Help?",
+      "contact-text": "If you can't find an answer to your question, please contact our support team.",
+      "contact-btn": "Contact Support",
+      "cta-title": "Ready to Help?",
+      "cta-text": "Join our volunteer network or request assistance for those affected by disasters.",
+      "subtitle": "Common questions about disaster relief coordination",
+      "quick-links": "Quick Links"
+    },
+    "home": {
+      "req.btn-txt": "Submit Request",
+      "view.btn-txt": "View Requests"
+    }
   }
 } 
