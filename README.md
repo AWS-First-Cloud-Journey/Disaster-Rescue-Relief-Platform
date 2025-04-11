@@ -159,7 +159,7 @@ yarn analyze
 # Push changes
 git add .
 git commit -m "Your commit message"
-git push origin main
+git push origin master
 
 # Deploy with Amplify
 amplify publish
