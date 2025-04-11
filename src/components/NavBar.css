@@ -1,0 +1,153 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: 'Noto Sans Myanmar', sans-serif;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-family: 'Noto Sans Myanmar', sans-serif;
+  white-space: nowrap;
+}
+
+.nav-links a:hover {
+  background-color: #f0f0f0;
+}
+
+.nar-link-active {
+  background-color: #f0f0f0;
+  color: #0073bb !important;
+}
+
+.login-btn,
+.regist-btn {
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Noto Sans Myanmar', sans-serif;
+}
+
+.login-btn {
+  background-color: transparent;
+  border: 1px solid #0073bb;
+  color: #0073bb;
+}
+
+.regist-btn {
+  background-color: #0073bb;
+  border: none;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 1rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+  }
+
+  .nav-links a {
+    font-size: 0.95rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    padding: 1rem;
+    position: relative;
+  }
+
+  .logo {
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .nav-links a {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem;
+    white-space: normal;
+    line-height: 1.4;
+  }
+
+  .login-btn,
+  .regist-btn {
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .ButtonDropdown {
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.5rem;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  /* Burmese language specific adjustments */
+  [lang="my"] .nav-links a {
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+  }
+
+  [lang="my"] .logo {
+    font-size: 1.3rem;
+  }
+} 

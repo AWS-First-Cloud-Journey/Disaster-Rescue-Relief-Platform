@@ -91,7 +91,8 @@
         "description": "Join now to be part of the emergency support community",
         "button": "Join Now"
       },
-      "footer": "2025 Myanmar Disaster Relief"
+      "footer": "2025 Myanmar Disaster Relief",
+      "view.btn-txt": "View Requests"
     },
     "request-page": {
       "title": "Request Help",
@@ -312,10 +313,18 @@
     },
     "faq-page": {
       "title": "Frequently Asked Questions (FAQs)",
+      "subtitle": "Common questions about disaster relief coordination",
+      "search-placeholder": "Search FAQs...",
+      "quick-links": "Quick Links",
+      "need-help": "Need More Help?",
+      "contact-text": "If you can't find an answer to your question, please contact our support team.",
+      "contact-btn": "Contact Support",
+      "cta-title": "Ready to Help?",
+      "cta-text": "Join our volunteer network or request assistance for those affected by disasters.",
       "q1": "What is ReliefConnect?",
-      "a1": " ReliefConnect is a disaster response platform that connects people affected by disasters with volunteers and resources. Currently, we're supporting relief efforts for the Myanmar earthquake while maintaining readiness for other emergencies.",
+      "a1": "ReliefConnect is a disaster response platform that connects people affected by disasters with volunteers and resources. Currently, we're supporting relief efforts for the Myanmar earthquake while maintaining readiness for other emergencies.",
       "q2": "How can I use this platform?",
-      "a2": "You can either request assistance if you're in an affected area or volunteer to help. Select 'Get Help Now' if you need assistance or 'Be a Volunteer' if you want to volunteer.",
+      "a2": "You can either request assistance if you're in an affected area or volunteer to help. Select 'Request Help' if you need assistance or 'Volunteer' if you want to help others.",
       "q3": "Who can request assistance?",
       "a3": "Anyone in disaster-affected areas can request help. Currently, we're focusing our efforts on those affected by the Myanmar earthquake.",
       "q4": "Is this service free?",

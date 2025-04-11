@@ -1,12 +1,23 @@
 /* FAQ.css */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap');
 
+:root {
+  --primary-color: #3182ce;
+  --text-primary: #1a365d;
+  --text-secondary: #4a5568;
+  --background-light: #f8fafc;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
 .faq-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
   font-family: 'Noto Sans Myanmar', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+  color: var(--text-primary);
 }
 
 /* Hero section */
@@ -31,14 +42,15 @@
 
 .faq-hero h1 {
   font-size: 2.8rem;
-  color: #1a365d;
+  color: var(--text-primary);
   margin-bottom: 16px;
   font-weight: 700;
+  line-height: 1.3;
 }
 
 .faq-hero p {
   font-size: 1.2rem;
-  color: #4a5568;
+  color: var(--text-secondary);
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.6;
@@ -56,9 +68,9 @@
   align-items: center;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   padding: 12px 16px;
-  transition: box-shadow 0.3s ease;
+  transition: var(--transition);
 }
 
 .search-input:focus-within {
@@ -75,8 +87,9 @@
   border: none;
   outline: none;
   font-size: 1rem;
-  color: #2d3748;
+  color: var(--text-primary);
   background: transparent;
+  font-family: 'Noto Sans Myanmar', sans-serif;
 }
 
 .search-input input::placeholder {
@@ -93,10 +106,10 @@
 
 /* Sidebar */
 .faq-sidebar {
-  background-color: #f8fafc;
+  background-color: var(--background-light);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   height: fit-content;
   position: sticky;
   top: 20px;
@@ -117,8 +130,9 @@
 
 .sidebar-header h3 {
   font-size: 1.3rem;
-  color: #1a365d;
+  color: var(--text-primary);
   margin: 0;
+  line-height: 1.4;
 }
 
 .sidebar-nav {
@@ -132,9 +146,10 @@
   border-radius: 8px;
   margin-bottom: 8px;
   font-size: 1rem;
-  color: #4a5568;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition);
+  line-height: 1.5;
 }
 
 .sidebar-nav li:hover {
@@ -241,26 +256,22 @@
 .faq-question h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--text-primary);
   margin: 0;
   flex: 1;
+  line-height: 1.4;
 }
 
 .faq-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #ebf8ff;
-  color: #3182ce;
-  transition: all 0.3s ease;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
 }
 
 .faq-item.expanded .faq-icon {
-  background-color: #3182ce;
-  color: white;
   transform: rotate(180deg);
 }
 
@@ -268,49 +279,47 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease, padding 0.3s ease;
-  padding: 0 24px;
 }
 
 .faq-item.expanded .faq-answer {
-  max-height: 500px;
+  max-height: 1000px;
   padding: 24px;
 }
 
 .faq-answer p {
-  margin: 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
   line-height: 1.6;
-  color: #4a5568;
+  margin: 0;
 }
 
 /* CTA Section */
 .faq-cta {
   text-align: center;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
-  border-radius: 16px;
-  padding: 60px 40px;
-  margin: 60px 0;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  padding: 60px 20px;
+  background-color: #f7fafc;
+  border-radius: 12px;
+  margin-top: 60px;
 }
 
 .faq-cta h2 {
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: #1a365d;
   margin-bottom: 16px;
-  font-weight: 700;
 }
 
 .faq-cta p {
   font-size: 1.1rem;
   color: #4a5568;
-  max-width: 700px;
+  max-width: 600px;
   margin: 0 auto 30px;
   line-height: 1.6;
 }
 
 .cta-buttons {
   display: flex;
-  justify-content: center;
   gap: 16px;
+  justify-content: center;
 }
 
 .cta-button {
@@ -320,7 +329,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: none;
+  text-decoration: none;
 }
 
 .cta-button.primary {
@@ -336,7 +345,7 @@
 .cta-button.secondary {
   background-color: white;
   color: #3182ce;
-  border: 2px solid #3182ce;
+  border: 1px solid #3182ce;
 }
 
 .cta-button.secondary:hover {
@@ -345,71 +354,131 @@
 }
 
 /* Responsive Design */
-@media (max-width: 992px) {
-  .faq-hero h1 {
-    font-size: 2.4rem;
+@media (max-width: 1200px) {
+  .faq-container {
+    max-width: 100%;
+    padding: 0 30px;
   }
-  
+
+  [lang="my"] .faq-hero h1 {
+    font-size: 2.4rem;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 992px) {
   .faq-content {
     grid-template-columns: 1fr;
+    gap: 30px;
   }
-  
+
   .faq-sidebar {
-    position: static;
+    position: relative;
+    top: 0;
+    margin-bottom: 20px;
   }
-  
-  .sidebar-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
   }
-  
-  .sidebar-nav li {
-    flex: 1;
-    min-width: 200px;
+
+  .cta-button {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  [lang="my"] .faq-question h3 {
+    font-size: 1.2rem;
+    line-height: 1.5;
   }
 }
 
 @media (max-width: 768px) {
-  .faq-hero {
-    padding: 40px 20px 30px;
-  }
-  
   .faq-hero h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
-  
+
   .faq-hero p {
     font-size: 1.1rem;
   }
-  
+
   .faq-cta h2 {
     font-size: 1.8rem;
   }
-  
+
   .faq-cta p {
     font-size: 1rem;
   }
-  
-  .cta-buttons {
-    flex-direction: column;
+
+  .search-container {
+    padding: 0 10px;
   }
-  
-  .cta-button {
-    width: 100%;
+
+  .faq-question {
+    padding: 16px;
+  }
+
+  .faq-answer {
+    padding: 16px;
+  }
+
+  [lang="my"] .faq-hero h1 {
+    font-size: 2rem;
+    line-height: 1.5;
+  }
+
+  [lang="my"] .faq-hero p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  [lang="my"] .sidebar-nav li {
+    font-size: 1.1rem;
+    line-height: 1.6;
   }
 }
 
 @media (max-width: 480px) {
+  .faq-container {
+    padding: 0 15px;
+  }
+
   .faq-hero h1 {
     font-size: 1.8rem;
   }
-  
+
   .faq-question h3 {
     font-size: 1rem;
   }
-  
+
   .faq-cta {
-    padding: 40px 20px;
+    padding: 40px 15px;
+  }
+
+  [lang="my"] .faq-hero h1 {
+    font-size: 1.6rem;
+    line-height: 1.6;
+  }
+
+  [lang="my"] .faq-question h3 {
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  [lang="my"] .faq-answer p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  [lang="my"] .sidebar-nav li {
+    font-size: 1rem;
+    padding: 10px 12px;
+    line-height: 1.7;
+  }
+
+  .contact-button {
+    padding: 10px 16px;
+    font-size: 0.9rem;
   }
 }

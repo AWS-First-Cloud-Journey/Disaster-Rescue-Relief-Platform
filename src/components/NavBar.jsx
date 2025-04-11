@@ -12,6 +12,7 @@ import { getCurrentUser, signOut, fetchUserAttributes } from "aws-amplify/auth";
 import logo from "../assets/logo.jpg";
 import { Languages } from "lucide-react";
 import { use } from "i18next";
+import "./NavBar.css";
 
 function NavBar(props) {
   const navigate = useNavigate();
