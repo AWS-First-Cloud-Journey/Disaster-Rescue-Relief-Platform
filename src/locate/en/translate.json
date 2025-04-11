@@ -59,30 +59,39 @@
     },
     "home": {
       "home": "Home",
-      "title": "Myanmar Earthquake Relief Hub: Support & Response",
-      "des": "Connecting communities affected by the Myanmar Earthquake with aid and volunteers",
+      "title": "Myanmar Earthquake Relief Coordination System",
+      "des": "A platform connecting disaster victims with volunteers for emergency assistance",
+      "features": {
+        "title": "Key Features"
+      },
       "req": {
         "title": "Request Help",
-        "desc": "Submit your request here for emergency supplies and shelter, medical assistance and first aid, evacuation support or essential resources. ",
-        "btn-txt": "Request Help"
+        "desc": "Submit emergency assistance requests to volunteers",
+        "btn-txt": "Submit Request"
       },
       "vol": {
-        "title": "Be a Volunteer",
-        "desc": "Join rescue efforts, provide on-ground support in affected areas and help distribute essential supplies.",
-        "btn-txt": "Volunteer Now"
+        "title": "Volunteer",
+        "desc": "Join to support emergency requests",
+        "btn-txt": "View Requests"
       },
       "dash": {
-        "title": "Requests Dashboard",
-        "desc": "Real-time data on emergency support requests, resource distribution and volunteer deployment status.",
+        "title": "Dashboard",
+        "desc": "Monitor and manage assistance requests",
         "btn-txt": "View Dashboard"
       },
-      "disaster-title": "Live Response Status",
+      "disaster-title": "Disaster Statistics",
       "disaster-infor": {
-        "1": "Active Requests",
-        "2": "Volunteers Deployed",
-        "3": "Fulfilled Requests",
-        "4": "Affected Areas"
-      }
+        "1": "Total Requests",
+        "2": "Total Volunteers",
+        "3": "Completed Requests",
+        "4": "Active Areas"
+      },
+      "cta": {
+        "title": "Let's Help Together",
+        "description": "Join now to be part of the emergency support community",
+        "button": "Join Now"
+      },
+      "footer": "Myanmar Earthquake Relief Coordination System"
     },
     "request-page": {
       "title": "Request Help",

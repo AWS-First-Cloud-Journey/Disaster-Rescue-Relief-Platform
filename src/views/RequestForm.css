@@ -1,12 +1,14 @@
+/* Responsive grid for request types */
 .request-types {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
   margin-top: 20px;
 }
 
+/* Request type card styles */
 .request-type {
-  background-color: white;
+  background-color: #fff;
   border: 1px solid #e1e4e8;
   border-radius: 8px;
   padding: 20px;
@@ -70,6 +72,8 @@
   border-radius: 8px;
   padding: 30px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .section-heading {
@@ -127,7 +131,7 @@
 
 .continue-btn {
   width: 100%;
-  background-color: #000;
+  background-color: #007bff;
   color: white;
   padding: 14px;
   border: none;
@@ -135,8 +139,29 @@
   cursor: pointer;
   font-size: 16px;
   margin-top: 20px;
+  transition: background-color 0.3s ease;
 }
 
 .continue-btn:hover {
-  background-color: #333;
+  background-color: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 20px;
+  }
+
+  .section-heading {
+    font-size: 20px;
+  }
+
+  .form-input,
+  .form-textarea {
+    font-size: 14px;
+  }
+
+  .continue-btn {
+    font-size: 14px;
+  }
 } 

@@ -17,7 +17,7 @@ i18n
     /* default language when load the website in browser */
     lng: "mi",
     /* When react i18next not finding any language to as default in borwser */
-    fallbackLng: "en",
+    fallbackLng: "mi",
     /* debugger For Development environment */
     debug: true,
     ns: ["translation"],

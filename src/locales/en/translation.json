@@ -1,0 +1,37 @@
+{
+  "home": {
+    "title": "Myanmar Earthquake Aid Coordination",
+    "des": "A platform connecting disaster victims with volunteers for emergency assistance",
+    "features": {
+      "title": "Key Features"
+    },
+    "req": {
+      "title": "Request Support",
+      "desc": "Send emergency support requests to volunteers",
+      "btn-txt": "Send Request"
+    },
+    "vol": {
+      "title": "Volunteer",
+      "desc": "Join to support emergency requests",
+      "btn-txt": "View Requests"
+    },
+    "dash": {
+      "title": "Dashboard",
+      "desc": "Track and manage support requests",
+      "btn-txt": "View Dashboard"
+    },
+    "disaster-title": "Disaster Statistics",
+    "disaster-infor": {
+      "1": "Total Requests",
+      "2": "Total Volunteers",
+      "3": "Completed Requests",
+      "4": "Active Areas"
+    },
+    "cta": {
+      "title": "Let's Help Together",
+      "description": "Join now to be part of the emergency support community",
+      "button": "Join Now"
+    },
+    "footer": "Myanmar Earthquake Aid Coordination"
+  }
+} 
