@@ -511,6 +511,8 @@ router.patch('/:id/verify', async (req, res) => {
     // Get volunteer information
     const volunteerId = req.params.id;
 
+    console.log(`Verifying volunteer with ID: ${volunteerId}`);
+
     // Find volunteer in DynamoDB
     // Note: For production with large datasets, consider adding a GSI on the id field
     const scanParams = {
@@ -524,6 +526,8 @@ router.patch('/:id/verify', async (req, res) => {
 
     const scanCommand = new ScanCommand(scanParams);
     const scanResult = await documentClient.send(scanCommand);
+
+    console.log(`Scan result for volunteer ${volunteerId}:`, scanResult);
 
     if (!scanResult.Items || scanResult.Items.length === 0) {
       return res.status(404).json({ error: 'Volunteer not found' });
