@@ -521,13 +521,10 @@ router.patch('/:id/verify', async (req, res) => {
       ExpressionAttributeValues: {
         ':idValue': volunteerId
       },
-      Limit: 1 // We only need the first match
     };
 
     const scanCommand = new ScanCommand(scanParams);
     const scanResult = await documentClient.send(scanCommand);
-
-    console.log(`Scan result for volunteer ${volunteerId}:`, scanResult);
 
     if (!scanResult.Items || scanResult.Items.length === 0) {
       return res.status(404).json({ error: 'Volunteer not found' });
@@ -557,9 +554,6 @@ router.patch('/:id/verify', async (req, res) => {
 
     const updateCommand = new UpdateCommand(updateParams);
     const result = await documentClient.send(updateCommand);
-
-    // Log the verification
-    console.log(`Volunteer ${volunteerId} verified by admin ${adminId}`);
 
     // Record this action in the volunteer's history
     const timestamp = new Date().toISOString();
