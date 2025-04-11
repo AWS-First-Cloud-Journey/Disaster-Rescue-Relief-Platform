@@ -1,3 +1,6 @@
+import { DeleteCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
+import { AdminGetUserCommand } from '@aws-sdk/client-cognito-identity-provider';
+
 /**
  * Generates a secure temporary password for new user accounts
  * @returns {string} A 12-character temporary password
@@ -137,4 +140,126 @@ export function calculateAvailabilityMetrics(volunteers) {
   });
 
   return metrics;
+}
+
+/**
+ * Checks if a user is an admin and removes them from the volunteers table if they are
+ * @param {string} userId - The Cognito user ID to check
+ * @param {string} userPoolId - Cognito User Pool ID
+ * @param {string} tableName - DynamoDB volunteers table name
+ * @param {Object} cognito - Initialized Cognito client  
+ * @param {Object} documentClient - Initialized DynamoDB Document client
+ * @returns {Promise<Object>} - Result object with operation details
+ */
+export async function removeIfAdmin(userId, userPoolId, tableName, cognito, documentClient) {
+  try {
+    // First check if the user is an admin in Cognito
+    const isAdmin = await checkIfUserIsAdmin(userId, userPoolId, cognito);
+
+    // If not an admin, no need to proceed
+    if (!isAdmin) {
+      return {
+        isAdmin: false,
+        message: 'User is not an admin, no removal needed'
+      };
+    }
+
+    // User is an admin, remove from volunteers table if present
+    const result = await removeFromVolunteersTable(userId, tableName, documentClient);
+
+    return {
+      isAdmin: true,
+      removed: result.removed,
+      message: result.message
+    };
+  } catch (error) {
+    console.error('Error in removeIfAdmin:', error);
+    throw new Error(`Failed to process admin check and removal: ${error.message}`);
+  }
+}
+
+/**
+ * Checks if a user has admin role in Cognito
+ * @param {string} userId - User ID to check
+ * @param {string} userPoolId - Cognito User Pool ID
+ * @param {Object} cognito - Initialized Cognito client
+ * @returns {Promise<boolean>} - True if user is an admin
+ */
+export async function checkIfUserIsAdmin(userId, userPoolId, cognito) {
+  try {
+    const command = new AdminGetUserCommand({
+      UserPoolId: userPoolId,
+      Username: userId
+    });
+
+    const response = await cognito.send(command);
+
+    // Check for admin role in user attributes
+    const customRoleAttr = response.UserAttributes.find(
+      attr => attr.Name === 'custom:role'
+    );
+
+    return Boolean(customRoleAttr && customRoleAttr.Value === 'admin');
+  } catch (error) {
+    console.error(`Error checking if user ${userId} is admin:`, error);
+    return false; // Assume not admin on error
+  }
+}
+
+/**
+ * Removes a user from the volunteers table
+ * @param {string} userId - User ID to remove
+ * @param {string} tableName - DynamoDB volunteers table name
+ * @param {Object} documentClient - Initialized DynamoDB Document client
+ * @returns {Promise<Object>} - Result of the removal operation
+ */
+async function removeFromVolunteersTable(userId, tableName, documentClient) {
+  try {
+    // Find the volunteer record(s)
+    const scanCommand = new ScanCommand({
+      TableName: tableName,
+      FilterExpression: 'id = :userId',
+      ExpressionAttributeValues: {
+        ':userId': userId
+      }
+    });
+
+    const { Items } = await documentClient.send(scanCommand);
+
+    if (!Items || Items.length === 0) {
+      return {
+        removed: false,
+        message: `Admin user ${userId} not found in volunteers table`
+      };
+    }
+
+    // Delete each matching record (normally should be just one)
+    const results = [];
+
+    for (const item of Items) {
+      const deleteCommand = new DeleteCommand({
+        TableName: tableName,
+        Key: {
+          id: item.id,
+          email: item.email
+        }
+      });
+
+      await documentClient.send(deleteCommand);
+      results.push(`Deleted record with email: ${item.email}`);
+    }
+
+    return {
+      removed: true,
+      recordsRemoved: Items.length,
+      message: `Admin user ${userId} successfully removed from volunteers table`,
+      details: results
+    };
+  } catch (error) {
+    console.error(`Error removing user ${userId} from volunteers table:`, error);
+    return {
+      removed: false,
+      message: `Failed to remove admin from volunteers table: ${error.message}`
+    };
+  }
 }
